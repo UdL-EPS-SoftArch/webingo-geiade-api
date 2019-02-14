@@ -4,47 +4,30 @@
 
 ## Vision
 
-**For** players **who** want to ...
+**For** bingo players **who** are interested in playing bingo with other people in order to win money and have fun.
 
-**the project** WEBingo **is a** ...
+**the project** WEBingo **is an** online platform **that** allows players to:
+ 
+ **·**  Join games
+ **·**  Deposit/Withdraw money
+ **·**  Buy bingo cards
+ 
 
-**that** allows them to 
-
-**Unlike** existing tools, WEBingo ...
-
-----
-
-**For** players **who** want to play more one "cartró" per game
-
-**the project** WEBingo **is a** plattform that allows them to place their bet for their chances to win the game
-
-**that** allows them to have double probability to win
-
-**Unlike** existing tools, WEBingo ...
-
-----
-
-**For** players **who** want quit playing bingo
-
-**the project** WEBingo **is a** 
-
-**that** closes their session
-
-**Unlike** existing tools, WEBingo ...
+**Unlike** existing tools, WEBingo is an awesome online bingo because it does not get profits, so prizes are higher.
 
 
 ## Features per Stakeholder
 
-| Player                        | Admin                           |
-| ------------------------------| --------------------------------|
-| ...                           | Register Player                 |
-|                               | ...                             |
-|                               |                                 |
-|                               |                                 |
-|                               |                                 |
-|                               |                                 |
-|                               |                                 |
-|                               |                                 |
+| Player                        | Admin                           |  System                       |
+| ------------------------------| --------------------------------| ------------------------------|
+| Register player               | Register player                 | Start game
+| Invite player                 | Create games                    | Deliver prizes
+| Join game                     | Remove player                   | Show results/winner
+| Accept invitation             | Confirm result                  | Create table
+| Select amount bingo cards     |                                 | Remove table
+| Leave game                    |                                 | Manage wallet
+| Withdraw money                |                                 | 
+| Deposit money                 |                                 |
 |                               |                                 |
 |                               |                                 |
 |                               |                                 |
