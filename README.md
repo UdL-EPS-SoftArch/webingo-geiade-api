@@ -8,10 +8,21 @@
 
 **the project** WEBingo **is a** ...
 
-**that** allows them to ...
+**that** allows them to 
 
 **Unlike** existing tools, WEBingo ...
 
+----
+
+**For** players **who** want to play more one "cartró" per game
+
+**the project** WEBingo **is a** ...
+
+**that** allows them to have double changes to win
+
+**Unlike** existing tools, WEBingo ...
+
+----
 
 ## Features per Stakeholder
 
