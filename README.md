@@ -16,13 +16,22 @@
 
 **For** players **who** want to play more one "cartró" per game
 
-**the project** WEBingo **is a** ...
+**the project** WEBingo **is a** plattform that allows them to place their bet for their chances to win the game
 
-**that** allows them to have double changes to win
+**that** allows them to have double probability to win
 
 **Unlike** existing tools, WEBingo ...
 
 ----
+
+**For** players **who** want quit playing bingo
+
+**the project** WEBingo **is a** 
+
+**that** closes their session
+
+**Unlike** existing tools, WEBingo ...
+
 
 ## Features per Stakeholder
 
