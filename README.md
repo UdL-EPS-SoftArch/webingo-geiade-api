@@ -23,7 +23,7 @@
 | Register player               | Register player                 | Start game
 | Invite player                 | Create games                    | Deliver prizes
 | Join game                     | Remove player                   | Show results/winner
-| Accept invitation             | Confirm result                  | Create table
+| Accept invitation             |                                 | Create table
 | Select amount bingo cards     |                                 | Remove table
 | Leave game                    |                                 | Manage wallet
 | Withdraw money                |                                 | 
