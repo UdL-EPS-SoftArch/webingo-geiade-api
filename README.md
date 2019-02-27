@@ -24,10 +24,10 @@
 | Invite player                 | Create games                    | Deliver prizes
 | Join game                     | Remove player                   | Show results/winner
 | Accept invitation             |                                 | Create table
-| Select amount bingo cards     |                                 | Remove table
-| Leave game                    |                                 | Manage wallet
-| Withdraw money                |                                 | 
-| Deposit money                 |                                 |
+| Leave game                    |                                 | Remove table
+| Withdraw money                |                                 | Manage wallet
+| Deposit money                 |                                 | 
+|                               |                                 |
 |                               |                                 |
 |                               |                                 |
 |                               |                                 |
