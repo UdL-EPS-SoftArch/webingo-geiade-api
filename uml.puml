@@ -1,0 +1,51 @@
+@startuml
+skinparam dpi 200
+skinparam classAttributeFontSize 8
+skinparam classArrowFontSize 9
+skinparam classFontSize 10
+skinparam nodesep 90
+skinparam ranksep 40
+hide stereotype
+skinparam class {
+	BackgroundColor White
+	BackgroundColor<<User>> LightBlue
+	BackgroundColor<<Card>> LightYellow
+}
+
+class Card <<Card>> {
+    Integer id
+    List <int> [rows][columns]
+    Float price
+}
+
+class Game <<Game>> {
+    Integer id
+    List <int> appearednumbers
+    List <Card> playingcards
+    List <Player> playingplayers
+    Float jackpot
+    Player bingowinner
+    Player linewinner
+}
+Card "has many" -left- "isplayed 1" Game
+
+class User <<User>> {
+    String username
+    String email
+    String password
+    Boolean admin
+
+}
+
+class Player <<User>> extends User {
+    Float wallet
+    Boolean isPlaying
+}
+Card "playedBy 1" -- "plays 1" Player
+Game "plays in many" -up- "has many" Player
+
+
+class Admin <<User>> extends User {
+
+}
+@enduml
