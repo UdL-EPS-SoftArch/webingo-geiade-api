@@ -1,9 +1,10 @@
 @startuml
+scale 800*800
 skinparam dpi 200
 skinparam classAttributeFontSize 8
 skinparam classArrowFontSize 9
 skinparam classFontSize 10
-skinparam nodesep 90
+skinparam nodesep 120
 skinparam ranksep 40
 hide stereotype
 skinparam class {
@@ -16,6 +17,13 @@ class Card <<Card>> {
     Integer id
     List <int> [rows][columns]
     Float price
+}
+
+class Invitation <<Invitation>> {
+    Integer id
+    Integer id_game
+    Player from
+    Player to
 }
 
 class Game <<Game>> {
@@ -43,6 +51,9 @@ class Player <<User>> extends User {
 }
 Card "playedBy 1" -- "plays 1" Player
 Game "plays in many" -up- "has many" Player
+Invitation "many" <-- "1" Player : invites
+Invitation "1" <-- "1" Player : receives
+Invitation "many" --> "1" Game : belongs
 
 
 class Admin <<User>> extends User {
