@@ -1,6 +1,7 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import lombok.Data;
@@ -12,6 +13,9 @@ import org.springframework.security.core.authority.AuthorityUtils;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Player extends User {
+	private int wallet;
+	private boolean isPlaying;
+	private List<Game> hasPlayed;
 
 	@Override
 	@Transient
