@@ -17,9 +17,12 @@ public class Game {
     @Id
     private int id;
     private int [] nums;
-    private List<Card> cardsInGame, players;
+    // private List<Card> cardsInGame, players;
     private double linePrice, bingoPrice;
     private Player lineWinner, bingoWinner;
 
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_PLAYER");
+    }
 
 }
