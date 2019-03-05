@@ -4,6 +4,9 @@ Feature: Join Game
   I want to being added to a game
 
   Scenario: Join a game as player
-    Given I join  username as a "username" and password "password"
-    When
-    Then The respons code is "201"
+    Given I login as with password "password" and a username "username"
+    When I join to a game with an existing id "<integer>"
+    Then The response code is <201>
+    And the user "player" is added to the "playingplayers"
+    And a new card is added to the "playingcards"
+    And the jackpot is increased by the card price
