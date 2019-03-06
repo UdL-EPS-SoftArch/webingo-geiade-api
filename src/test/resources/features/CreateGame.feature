@@ -6,7 +6,7 @@ Feature: Create Game
   Scenario: Create new game as system
     Given I login as "system" with password "password"
     When I register a new game
-    Then The response code is <202>
+    Then The response code is 200
     And It has been created a game
 
   Scenario: Create new game with existing "id"
