@@ -2,7 +2,6 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.handler;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
-import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,31 +25,26 @@ public class PlayerEventHandler {
     PlayerRepository playerRepository;
 
     @HandleBeforeCreate
-    @Transactional
     public void handlePlayerPreCreate(Player player) {
         logger.info("Before creating: {}", player.toString());
     }
 
     @HandleBeforeSave
-    @Transactional
     public void handlePlayerPreSave(Player player){
         logger.info("Before updating: {}", player.toString());
     }
 
     @HandleBeforeDelete
-    @Transactional
     public void handlePlayerPreDelete(Player player){
         logger.info("Before deleting: {}", player.toString());
     }
 
     @HandleBeforeLinkSave
-    @Transactional
     public void handlePlayerPreLinkSave(Player player, Object o) {
         logger.info("Before linking: {} to {}", player.toString(), o.toString());
     }
 
     @HandleAfterCreate
-    @Transactional
     public void handlePlayerPostCreate(Player player){
         logger.info("After creating: {}", player.toString());
         player.encodePassword();
@@ -58,7 +52,6 @@ public class PlayerEventHandler {
     }
 
     @HandleAfterSave
-    @Transactional
     public void handlePlayerPostSave(Player player){
         logger.info("After updating: {}", player.toString());
         player.encodePassword();
@@ -66,13 +59,11 @@ public class PlayerEventHandler {
     }
 
     @HandleAfterDelete
-    @Transactional
     public void handlePlayerPostDelete(Player player){
         logger.info("After deleting: {}", player.toString());
     }
 
     @HandleAfterLinkSave
-    @Transactional
     public void handlePlayerPostLinkSave(Player player, Object o) {
         logger.info("After linking: {} to {}", player.toString(), o.toString());
     }
