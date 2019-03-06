@@ -27,7 +27,7 @@ public class CreateGameStepDef {
     public void iRegisterANewGame() throws Throwable {
         JSONObject game = new JSONObject();
         stepDefs.result = stepDefs.mockMvc.perform(
-                post("/players")
+                post("/games")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(game.toString())
                         .accept(MediaType.APPLICATION_JSON)

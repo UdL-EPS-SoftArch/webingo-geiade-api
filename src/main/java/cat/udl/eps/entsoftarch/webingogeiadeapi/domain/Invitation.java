@@ -12,16 +12,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 @Entity
-public class Game {
+public class Invitation {
     @Id
     private int id;
-    private int [] nums;
-    // private List<Card> cardsInGame, players;
-    private double linePrice, bingoPrice;
-    private Player lineWinner, bingoWinner;
-
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_PLAYER");
-    }
-
+    private int id_game;
+    private Player from, to;
 }
