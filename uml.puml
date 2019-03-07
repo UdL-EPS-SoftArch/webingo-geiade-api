@@ -47,7 +47,7 @@ class User <<User>> {
 
 class Player <<User>> extends User {
     Float wallet
-    Boolean isPlaying
+    Game isPlaying
 }
 Card "playedBy 1" -- "plays 1" Player
 Game "plays in many" -up- "has many" Player
