@@ -2,7 +2,6 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.handler;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Admin;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.AdminRepository;
-import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ public class AdminEventHandler {
     AdminRepository adminRepository;
 
     @HandleAfterCreate
-    @Transactional
     public void handleAdminPostCreate(Admin admin){
         logger.info("After creating: {}", admin.toString());
         admin.encodePassword();
@@ -28,7 +26,6 @@ public class AdminEventHandler {
     }
 
     @HandleAfterSave
-    @Transactional
     public void handleAdminPostSave(Admin admin){
         logger.info("After updating: {}", admin.toString());
         admin.encodePassword();

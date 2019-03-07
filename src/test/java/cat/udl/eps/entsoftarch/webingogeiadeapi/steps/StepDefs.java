@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import cat.udl.eps.entsoftarch.webingogeiadeapi.WebingoGeiAdeApiApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -65,5 +66,20 @@ public class StepDefs {
             result.andExpect(status().reason(is(message)));
         else
             result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
+    }
+
+    @And("^It has not been invited any player to the game$")
+    public void itHasNotBeenInvitedAnyPlayerToTheGame() {
+
+    }
+
+    @And("^It has been created the Invitation to the current game$")
+    public void itHasBeenCreatedTheInvitationToTheCurrentGame() {
+    }
+
+    @And("^It has not been invited the player with username \"([^\"]*)\"$")
+    public void itHasNotBeenInvitedThePlayerWithUsername(String arg0) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
     }
 }
