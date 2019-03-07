@@ -9,7 +9,7 @@ Feature: Invite Player
 
   Scenario: Invite X Players to a game
     Given I login as "player" with password "password_player"
-    When I invite a X numner os players to the game with username "judvillanueva", username "miremoix", username "davidcalavia",
+    When I invite X numbers of players to the game with username "judvillanueva", username "miremoix", username "davidcalavia",
     Then The response code is 201
     And It has been created the Invitation to the current game
 

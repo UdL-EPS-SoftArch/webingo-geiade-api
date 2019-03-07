@@ -11,10 +11,6 @@ public class InvitePlayertepdefs {
         throw new PendingException();
     }
 
-    @And("^It has not been invited any player to the game$")
-    public void itHasNotBeenInvitedAnyPlayerToTheGame() {
-    }
-
     @When("^I invite a X numner os players to the game with username \"([^\"]*)\", username \"([^\"]*)\", username \"([^\"]*)\",$")
     public void iInviteAXNumnerOsPlayersToTheGameWithUsernameUsernameUsername(String arg0, String arg1, String arg2) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
@@ -27,13 +23,8 @@ public class InvitePlayertepdefs {
         throw new PendingException();
     }
 
-    @And("^It has been created the Invitation to the current game$")
-    public void itHasBeenCreatedTheInvitationToTheCurrentGame() {
-        
-    }
-
-    @And("^It has not been invited the player with username \"([^\"]*)\"$")
-    public void itHasNotBeenInvitedThePlayerWithUsername(String arg0) throws Throwable {
+    @When("^I invite X numbers of players to the game with username \"([^\"]*)\", username \"([^\"]*)\", username \"([^\"]*)\",$")
+    public void iInviteXNumbersOfPlayersToTheGameWithUsernameUsernameUsername(String arg0, String arg1, String arg2) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
