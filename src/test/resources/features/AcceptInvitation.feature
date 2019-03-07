@@ -43,8 +43,8 @@ Feature: Accept Invitation
     And The error message is "length must be between 8 and 256"
     And It has not been created a player with username "player"
 
-    superar el timeout
-    accpetar i el joc ja no existeix
-    joc ja ha començat
-    correcte tot
-    rechazarla
+    #superar el timeout
+    #accpetar i el joc ja no existeix
+    #joc ja ha començat
+    #correcte tot
+    #rechazarla
