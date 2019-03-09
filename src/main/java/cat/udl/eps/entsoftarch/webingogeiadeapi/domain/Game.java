@@ -12,7 +12,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 
 @Entity
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class Game extends UriEntity<Integer>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
