@@ -5,9 +5,9 @@ Feature: Create Game
 
   Scenario: Create new game as admin
     Given I login as "admin" with password "password"
-    When I register a new game
-    Then The response code is 200
-    And It has been created a game
+    When I register a new game with name "something"
+    Then The response code is 201
+    And It has been created a game with id 1 and name "something"
 
   Scenario: Create new game with existing "id"
     Given A game is currently existing

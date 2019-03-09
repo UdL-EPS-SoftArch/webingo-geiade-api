@@ -2,8 +2,7 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 
 import java.util.Collection;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.smartcardio.Card;
 
 import lombok.Data;
@@ -12,12 +11,20 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 @Entity
-public class Game {
+@Data
+@EqualsAndHashCode
+public class Game extends UriEntity<Integer>{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String name;
     private int [] nums;
     // private List<Card> cardsInGame, players;
     private double linePrice, bingoPrice;
     private Player lineWinner, bingoWinner;
 
-
+    @Override
+    public Integer getId() {
+        return id;
+    }
 }
