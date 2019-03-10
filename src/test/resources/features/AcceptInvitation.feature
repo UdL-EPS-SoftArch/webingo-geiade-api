@@ -3,48 +3,28 @@ Feature: Accept Invitation
   As a player
   I want to accept a new invitation for a game
 
-  Scenario: Accept new invitation as player
-    Given I login as "player" with password "password"
-    When I accept a new invitation with username "player", email "player@webingo.org" and password "password" and game id "id"
+  Scenario: Accept invitation as player
+    Given I login as "email" with password "password"
+    When I accept a new invitation with username "username", email "player@webingo.org", password "password" and game id "id"
     Then The response code is 208
-    And It has been addded a player with username "player" and email "player@webingo.org" to the game "id", the password is not returned
+    And It has been added a player with username "username" to the game "id", the password is not returned
 
-  Scenario: Try to register new player without authenticating
-    Given I'm not logged in
-    When I register a new player with username "player", email "player@webingo.org" and password "password"
-    Then The response code is 401
-    And It has not been created a player with username "player"
+  Scenario: Accept invitation but the game is finished
+    Given I login as "email" with password "password"
+    When I accept a new invitation with username "username", email "player@webingo.org", password "password" and game id "id"
+    And The game has already finished or is underway
+    Then The response code is !!!
+    And The player has not been added to the game
 
-  Scenario: Register new player with empty password
-    Given I login as "admin" with password "password"
-    When I register a new player with username "player", email "player@webingo.org" and password ""
-    Then The response code is 400
-    And The error message is "must not be blank"
-    And It has not been created a player with username "player"
+  Scenario: Reject invitation as player
+    Given I login as "email" with password "password"
+    When I reject a new invitation with username "username", email "player@webingo.org", password "password" and game id "id"
+    Then The response code is <number>
+    And The player has not been added to the game
 
-  Scenario: Register new player with empty email
-    Given I login as "admin" with password "password"
-    When I register a new player with username "player", email "" and password "password"
-    Then The response code is 400
-    And The error message is "must not be blank"
-    And It has not been created a player with username "player"
-
-  Scenario: Register new player with invalid email
-    Given I login as "admin" with password "password"
-    When I register a new player with username "player", email "playerawebingo.org" and password "password"
-    Then The response code is 400
-    And The error message is "must be a well-formed email address"
-    And It has not been created a player with username "player"
-
-  Scenario: Register new player with password shorter than 8 characters
-    Given I login as "admin" with password "password"
-    When I register a new player with username "player", email "player@webingo.org" and password "pass"
-    Then The response code is 400
-    And The error message is "length must be between 8 and 256"
-    And It has not been created a player with username "player"
-
-    #superar el timeout
-    #accpetar i el joc ja no existeix
-    #joc ja ha començat
-    #correcte tot
-    #rechazarla
+  Scenario: Game is not available, invitation time has been exceeded
+    Given I login as "email" with password "password"
+    When I accept a new invitation with username "username", email "player@webingo.org", password "password" and game id "id"
+    And Time "time" has been exceeded
+    Then The response code is <number>
+    And The player has not been added to the game
