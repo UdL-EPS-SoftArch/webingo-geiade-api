@@ -51,21 +51,11 @@ public class CreateGameStepDef {
     @When("^I register another game with name \"([^\"]*)\"$")
     public void iRegisterAnotherGameWithName(String name) throws Throwable {
         JSONObject game1 = new JSONObject();
-        JSONObject game2 = new JSONObject();
         game1.put("name", name);
-        game2.put("name", name);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/games")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(game1.toString())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
-
-        stepDefs.result = stepDefs.mockMvc.perform(
-                post("/games")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(game2.toString())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
