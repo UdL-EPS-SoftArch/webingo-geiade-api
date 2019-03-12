@@ -1,5 +1,6 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.steps;
 
+import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Invitation;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
@@ -28,4 +29,9 @@ public class InvitePlayertepdefs {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
+
+    @And("^It has been created the Invitation to the current game$")
+    public void itHasBeenCreatedTheInvitationToTheCurrentGame() {
+    }
+
 }

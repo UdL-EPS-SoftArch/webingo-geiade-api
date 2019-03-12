@@ -59,27 +59,4 @@ public class StepDefs {
     public void theResponseCodeIs(int code) throws Throwable {
         result.andExpect(status().is(code));
     }
-
-    @And("^The error message is \"([^\"]*)\"$")
-    public void theErrorMessageIs(String message) throws Throwable {
-        if (result.andReturn().getResponse().getContentAsString().isEmpty())
-            result.andExpect(status().reason(is(message)));
-        else
-            result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
-    }
-
-    @And("^It has not been invited any player to the game$")
-    public void itHasNotBeenInvitedAnyPlayerToTheGame() {
-
-    }
-
-    @And("^It has been created the Invitation to the current game$")
-    public void itHasBeenCreatedTheInvitationToTheCurrentGame() {
-    }
-
-    @And("^It has not been invited the player with username \"([^\"]*)\"$")
-    public void itHasNotBeenInvitedThePlayerWithUsername(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
 }
