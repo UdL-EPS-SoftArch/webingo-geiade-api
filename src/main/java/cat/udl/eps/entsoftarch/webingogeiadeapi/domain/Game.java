@@ -7,6 +7,7 @@ import javax.smartcardio.Card;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
@@ -17,6 +18,7 @@ public class Game extends UriEntity<Integer>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @UniqueElements
     private String name;
     private int [] nums;
     // private List<Card> cardsInGame, players;

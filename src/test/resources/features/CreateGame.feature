@@ -9,10 +9,9 @@ Feature: Create Game
     Then The response code is 201
     And It has been created a game with id 1 and name "something"
 
-  Scenario: Create new game with existing "id"
-    Given A game is currently existing
-    When I create a new game
-    Then The response code is 500
-    And It has not been created a new game with same "id"
+  Scenario: Create new game with existing name
+    Given I login as "admin" with password "password"
+    When I register another game with name "something"
+    Then The response code is 409
 
 

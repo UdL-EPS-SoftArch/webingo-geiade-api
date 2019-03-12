@@ -47,4 +47,12 @@ public class CreateGameStepDef {
                 .andDo(print())
                 .andExpect(jsonPath("$.name", is(name)));
     }
+
+    @When("^I register another game with name \"([^\"]*)\"$")
+    public void iRegisterAnotherGameWithName(String name) throws Throwable {
+        JSONObject game1 = new JSONObject();
+        JSONObject game2 = new JSONObject();
+        game1.put("name", name);
+        game2.put("name", name);
+    }
 }
