@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-public class RegisterPlayerStepDef {
+public class git RegisterPlayerStepDef {
 
   private static final Logger logger = LoggerFactory.getLogger(RegisterPlayerStepDef.class);
 
