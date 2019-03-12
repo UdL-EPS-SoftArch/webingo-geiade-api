@@ -103,4 +103,3 @@ public class StepDefs {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
-}
