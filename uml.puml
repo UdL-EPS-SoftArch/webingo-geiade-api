@@ -29,8 +29,6 @@ class Invitation <<Invitation>> {
 class Game <<Game>> {
     Integer id
     List <int> appearednumbers
-    List <Card> playingcards
-    List <Player> playingplayers
     Float jackpot
     Player bingowinner
     Player linewinner
@@ -47,10 +45,11 @@ class User <<User>> {
 
 class Player <<User>> extends User {
     Float wallet
-    Boolean isPlaying
+    Game isPlaying_game
+    Card isPlaying_card
 }
 Card "playedBy 1" -- "plays 1" Player
-Game "plays in many" -up- "has many" Player
+Game "plays in 1" -up- "has many" Player
 Invitation "many" <-- "1" Player : invites
 Invitation "1" <-- "1" Player : receives
 Invitation "many" --> "1" Game : belongs
