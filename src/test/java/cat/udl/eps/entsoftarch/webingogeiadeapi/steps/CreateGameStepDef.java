@@ -1,7 +1,7 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.steps;
 
-import cucumber.api.java.en.When;
-import org.json.JSONObject;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
+import cucumber.api.PendingException;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,13 +23,39 @@ public class CreateGameStepDef {
     @Autowired
     private StepDefs stepDefs;
 
-    @When("^I register a new game$")
-    public void iRegisterANewGame() throws Throwable {
+    @When("^I register a new game with name \"([^\"]*)\"$")
+    public void iRegisterANewGameWithIdAndName(String name) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
         JSONObject game = new JSONObject();
+        game.put("name", name);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/games")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(game.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @And("^It has been created a game with id (\\d+) and name \"([^\"]*)\"$")
+    public void itHasBeenCreatedAGameWithIdAndName(int id, String name) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/games/{id}", id)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.name", is(name)));
+    }
+
+    @When("^I register another game with name \"([^\"]*)\"$")
+    public void iRegisterAnotherGameWithName(String name) throws Throwable {
+        JSONObject game1 = new JSONObject();
+        game1.put("name", name);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/games")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(game1.toString())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
