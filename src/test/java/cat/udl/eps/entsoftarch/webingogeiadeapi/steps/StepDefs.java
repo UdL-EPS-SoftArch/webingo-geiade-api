@@ -91,7 +91,7 @@ public class StepDefs {
 
     @And("^The game has already finished or is underway$")
     public void theGameHasAlreadyFinishedOrIsUnderway() {
-        
+
     }
 
     @And("^The player has not been added to the game$")
@@ -103,3 +103,4 @@ public class StepDefs {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
+}

@@ -14,7 +14,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 
 @Entity
 public class Invitation {
-    @Id @NotBlank
+    @Id
+    @NotBlank
     private int id;
     private int id_game;
     private Player from, to;

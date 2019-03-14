@@ -3,7 +3,7 @@ Feature: Invite Player
 
   Scenario: Invite a Player that doesn't exist as player
     Given I login as "player" with password "password_player"
-    When I invite a new player to the game with username "groover"
+    When I invite a new player to the game with username "groover" and message "Wanna join my game?"
     Then The response code is 404
     And It has not been invited any player to the game
 
