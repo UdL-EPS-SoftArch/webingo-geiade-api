@@ -1,6 +1,6 @@
 # WEBingo - Web Bingo - API
 
-[![Build Status](https://travis-ci.org/rhizomik/webingo-geiade-api.svg?branch=master)](https://travis-ci.org/rhizomik/webingo-geiade-api/branches) 
+[![Build Status](https://travis-ci.org/UdL-EPS-SoftArch/webingo-geiade-api.svg?branch=master)](https://travis-ci.org/UdL-EPS-SoftArch/webingo-geiade-api/branches) 
 
 ## Vision
 
@@ -35,4 +35,4 @@
 
 ## Entities Model
 
-...
+![Entities Model Diagram](http://www.plantuml.com/plantuml/svg/3Smn3iCW343HFQTe3m3UEwL3jmwLeXw0W0kMm21ZAzSlo__RswS6KMjrknF7QWbDwgseZla0a73vJ5hij8aIEoko-jWRVDFRlJw7E_fFdn8BN7WIv-uoKaZemY1eOIeABDoFbMr7Jkj_)
