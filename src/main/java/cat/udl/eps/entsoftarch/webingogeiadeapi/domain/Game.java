@@ -24,6 +24,7 @@ public class Game extends UriEntity<Integer>{
     // private List<Card> cardsInGame, players;
     private double linePrice, bingoPrice;
     private Player lineWinner, bingoWinner;
+    private int price;
 
     @Override
     public Integer getId() {
