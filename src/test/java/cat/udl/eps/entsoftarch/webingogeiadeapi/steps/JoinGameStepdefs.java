@@ -14,8 +14,11 @@ import org.springframework.http.MediaType;
 
 import java.awt.*;
 
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 public class JoinGameStepdefs {
 
@@ -31,9 +34,13 @@ public class JoinGameStepdefs {
 
 
     @When("^I join to a game with name \"([^\"]*)\"$")
-    public void iJoinToAGameWithName(String arg0) throws Throwable {
+    public void iJoinToAGameWithName(String name) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/games/{name}", name)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 
     @And("^existing game with name \"([^\"]*)\" and price (\\d+)$")
@@ -56,4 +63,6 @@ public class JoinGameStepdefs {
         int playerWallet = this.player.getWallet();
         // comprobació playerWallet > this.game.getPrice();
     }
+
+
 }
