@@ -15,6 +15,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 public class Player extends User {
 	private int wallet;
 	private boolean isPlaying;
+
 	// private List<Game> hasPlayed;
 
 	@Override
