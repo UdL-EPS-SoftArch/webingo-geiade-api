@@ -20,6 +20,8 @@ public class Invitation {
     private Long id;
     private int id_game;
     private Player from, to;
+    private boolean isUnderway;
+    private boolean isAccepted;
     private boolean timeout;
     private String message;
 

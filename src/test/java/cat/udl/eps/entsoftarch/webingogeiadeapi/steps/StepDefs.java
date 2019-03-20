@@ -68,6 +68,11 @@ public class StepDefs {
             result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
     }
 
+    @And("^It has not been invited any player to the game$")
+    public void itHasNotBeenInvitedAnyPlayerToTheGame() {
+
+    }
+
     @And("^It has been added a player with username \"([^\"]*)\" to the game \"([^\"]*)\", the password is not returned$")
     public void itHasBeenAdddedAPlayerWithUsernameToTheGameThePasswordIsNotReturned(String arg0, String arg1) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
