@@ -4,6 +4,7 @@ import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Invitation;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
+//import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.InvitationRepository;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
@@ -29,7 +30,10 @@ public class InvitePlayertepdefs {
     private StepDefs stepDefs;
 
     @Autowired
-    private UserRepository player;
+    private UserRepository playerrepo;
+
+    @Autowired
+    //private InvitationRepository invitationrepo;
 
     //Scenario 1
     @WithMockUser (username="admin",roles={"USER","ADMIN"})
@@ -39,7 +43,7 @@ public class InvitePlayertepdefs {
 
         Invitation game_invitation = new Invitation();
         game_invitation.setMessage(message);
-        game_invitation.setPlayer_invited((Player)player.findByEmail(email));
+        game_invitation.setPlayer_invited((Player)playerrepo.findByEmail(email));
 
         String invitation = stepDefs.mapper.writeValueAsString(game_invitation);
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -57,23 +61,24 @@ public class InvitePlayertepdefs {
         Player player_invited= new Player();
         player_invited.setEmail(email);
         player_invited.setUsername(username);
-        player.save(player_invited);
+        playerrepo.save(player_invited);
     }
 
-    @And("^It has not been invited any player to the game$")
-    public void itHasNotBeenInvitedAnyPlayerToTheGame() throws Throwable {
+    @And("^It has not been created any invitation$")
+    public void itHasNotBeenCreatedAnyInvitation() throws Exception {
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/invitations")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$._embedded.invitations", hasSize(0)));
+                .andExpect(status().isOk());
+                //.andExpect(invitationrepo, hasSize(0));
     }
 
     //Scenario 2
     @And("^It has been invited to game the player with email \"([^\"]*)\" and message \"([^\"]*)\"$")
     public void itHasBeenInvitedToGameThePlayerWithEmailAndMessage(String arg0, String arg1) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+
+        //playerrepo.save(player_invited);
     }
 }
