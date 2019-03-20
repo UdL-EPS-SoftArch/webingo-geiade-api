@@ -19,7 +19,6 @@ public class Invitation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private int id_game;
-    //private Player from, to;
     private boolean isUnderway;
     private boolean isAccepted;
     private boolean timeout;
@@ -32,6 +31,10 @@ public class Invitation {
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private  Player player_invited;
+
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    private Player player_who_invited;
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)

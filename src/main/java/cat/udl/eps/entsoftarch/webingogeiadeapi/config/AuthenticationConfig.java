@@ -43,5 +43,13 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
       user.encodePassword();
       playerRepository.save(user);
     }
+    if (!playerRepository.existsById("player")) {
+      Player player = new Player();
+      player.setEmail("player@webingo.org");
+      player.setUsername("player");
+      player.setPassword(defaultPassword);
+      player.encodePassword();
+      playerRepository.save(player);
+    }
   }
 }
