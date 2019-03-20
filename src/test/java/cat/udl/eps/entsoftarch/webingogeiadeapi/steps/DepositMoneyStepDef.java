@@ -2,6 +2,8 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.steps;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import cucumber.api.PendingException;
 
 import static org.hamcrest.Matchers.is;
@@ -21,11 +23,24 @@ import org.springframework.http.MediaType;
 
 public class DepositMoneyStepDef {
     @Autowired
+    UserRepository playerRepository;
+    @Autowired
     private StepDefs stepDefs;
 
-    @When("^I deposit money (\\d+) euros in my wallet$")
-    public void iDepositMoneyEurosInMyWallet(int deposit) throws Throwable {
-        Player player = new Player();
-        player.setWallet(player.getWallet() + deposit);
+    @When("^As \"([^\"]*)\" I deposit money (\\d+) euros in my wallet$")
+    public void asIDepositMoneyEurosInMyWallet(String username, int cash) throws Throwable {
+        Player player = (Player) playerRepository.findByEmail(username);
+        player.setWallet(cash);
+        playerRepository.save(player);
+    }
+
+    @And("^\"([^\"]*)\" wallet is (\\d+)$")
+    public void walletIs(String username, int cash) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/players/{username}", username)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.wallet", is(cash)));
     }
 }
