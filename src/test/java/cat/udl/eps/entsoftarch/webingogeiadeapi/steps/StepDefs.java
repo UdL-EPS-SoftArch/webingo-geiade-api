@@ -73,33 +73,9 @@ public class StepDefs {
 
     }
 
-    @And("^It has been created the Invitation to the current game$")
-    public void itHasBeenCreatedTheInvitationToTheCurrentGame() {
-    }
-
-    @And("^It has not been invited the player with username \"([^\"]*)\"$")
-    public void itHasNotBeenInvitedThePlayerWithUsername(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @And("^It has been added a player with username \"([^\"]*)\" to the game \"([^\"]*)\", the password is not returned$")
+    @And("^It has been added a player with username \"([^\"]*)\" to the game \"([^\"]*)\"$")
     public void itHasBeenAdddedAPlayerWithUsernameToTheGameThePasswordIsNotReturned(String arg0, String arg1) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
     }
-
-    @And("^The game has already finished or is underway$")
-    public void theGameHasAlreadyFinishedOrIsUnderway() {
-        
-    }
-
-    @And("^The player has not been added to the game$")
-    public void thePlayerHasNotBeenAddedToTheGame() {
-    }
-
-    @And("^Time \"([^\"]*)\" has been exceeded$")
-    public void timeHasBeenExceeded(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
+}

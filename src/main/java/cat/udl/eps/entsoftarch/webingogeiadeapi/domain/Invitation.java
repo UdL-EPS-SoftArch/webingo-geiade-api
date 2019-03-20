@@ -20,4 +20,5 @@ public class Invitation {
     private Player from, to;
     private int time;
     private boolean isUnderway;
+    private boolean isAccepted;
 }
