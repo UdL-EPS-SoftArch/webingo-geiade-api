@@ -4,7 +4,7 @@ import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Invitation;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
-//import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.InvitationRepository;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.InvitationRepository;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.http.MediaType;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
+
+import java.rmi.UnexpectedException;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,7 +35,7 @@ public class InvitePlayertepdefs {
     private UserRepository playerrepo;
 
     @Autowired
-    //private InvitationRepository invitationrepo;
+    private InvitationRepository invitationrepo;
 
     //Scenario 1
     @WithMockUser (username="admin",roles={"USER","ADMIN"})
@@ -66,12 +68,9 @@ public class InvitePlayertepdefs {
 
     @And("^It has not been created any invitation$")
     public void itHasNotBeenCreatedAnyInvitation() throws Exception {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/invitations")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk());
-                //.andExpect(invitationrepo, hasSize(0));
+       if (invitationrepo.count() != 0) {
+           throw new UnexpectedException("The invitation repo it's not zero!!");
+       }
     }
 
     //Scenario 2
