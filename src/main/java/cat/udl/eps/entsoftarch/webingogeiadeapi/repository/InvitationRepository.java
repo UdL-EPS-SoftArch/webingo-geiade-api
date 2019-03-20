@@ -13,12 +13,7 @@ import java.util.List;
 
 @RepositoryRestResource
 
-public interface InvitationRepository extends PagingAndSortingRepository<Invitation, Integer> {
+public interface InvitationRepository extends PagingAndSortingRepository<Invitation, Long> {
 
-    /**
-     * Find the list of admin users.
-     * @param text String that refers to the name of the admin user.
-     * @return a list of the admin users.
-     */
-    Invitation findById(int id);
+    Invitation findById(long id);
 }

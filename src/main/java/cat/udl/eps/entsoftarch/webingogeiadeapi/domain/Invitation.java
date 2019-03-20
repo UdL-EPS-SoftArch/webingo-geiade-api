@@ -17,9 +17,9 @@ import org.springframework.security.core.authority.AuthorityUtils;
 public class Invitation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private int id_game;
-    private Player from, to;
+    //private Player from, to;
     private boolean isUnderway;
     private boolean isAccepted;
     private boolean timeout;

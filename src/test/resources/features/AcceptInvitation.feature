@@ -5,9 +5,9 @@ Feature: Accept Invitation
 
   Scenario: Accept invitation as player
     Given I login as "email" with password "password"
-    When I accept a new invitation with username "username" and game id "id"
-    Then The response code is 200
-    And It has been added a player with username "username" to the game "id"
+    And Invitation "invitation" is already created
+    When I accept a new invitation "invitation" with username "username" and game id "id"
+    Then The invitation is accepted
 
   Scenario: Accept invitation but the game is finished
     Given I login as "email" with password "password"
