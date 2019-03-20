@@ -43,4 +43,10 @@ public class DepositMoneyStepDef {
                 .andDo(print())
                 .andExpect(jsonPath("$.wallet", is(cash)));
     }
+
+    @When("^As \"([^\"]*)\" I deposit (\\d+) euros in \"([^\"]*)\"$")
+    public void asIDepositEurosIn(String arg0, int arg1, String arg2) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+
+    }
 }
