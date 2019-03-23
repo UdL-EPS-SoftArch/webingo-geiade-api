@@ -12,6 +12,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 @Entity
+@Data
+@EqualsAndHashCode(callSuper = false)
 public class Card {
     @Id
     private int id;

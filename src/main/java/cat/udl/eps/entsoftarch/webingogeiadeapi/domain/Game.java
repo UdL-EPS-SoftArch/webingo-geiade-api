@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.*;
-import javax.smartcardio.Card;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
