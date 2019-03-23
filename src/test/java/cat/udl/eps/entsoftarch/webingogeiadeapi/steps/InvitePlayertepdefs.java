@@ -36,9 +36,6 @@ public class InvitePlayertepdefs {
     private UserRepository playerrepo;
     //BBDD of existing players
 
-    @Autowired
-    private InvitationRepository invitationrepo;
-    //BBDD of active invitations
 
     private Invitation game_invitation;
 
@@ -46,14 +43,14 @@ public class InvitePlayertepdefs {
     @WithMockUser
     @When("^I invite a new player to the game with email \"([^\"]*)\" and message \"([^\"]*)\"$")
     public void iInviteANewPlayerToTheGameWithUsernameAndMessage(String message, String email) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
 
         this.game_invitation = new Invitation();
         game_invitation.setMessage(message);
         Player invited = (Player)playerrepo.findByEmail(email);
         game_invitation.setPlayer_invited(invited);
-
-        //invitationrepo.save(game_invitation);
+        game_invitation.setAccepted(false);
+        game_invitation.setTimeout(false);
+        game_invitation.setUnderway(false);
 
         String invitation = stepDefs.mapper.writeValueAsString(game_invitation);
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -66,21 +63,16 @@ public class InvitePlayertepdefs {
 
     }
 
-    @And("^There is a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
-    public void thereIsAPlayerWithUsernameAndEmail(String username, String email) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        Player player_invited= new Player();
-        player_invited.setEmail(email);
-        player_invited.setUsername(username);
-        player_invited.setPassword("password");
-
-        playerrepo.save(player_invited);
-    }
-
     @And("^There is not a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
     public void thereIsNotAPlayerWithUsernameAndEmail(String username, String email) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        playerrepo.findByEmail(email);
+
+        Player player_not_found= new Player();
+        String email_error = "danierror@webingo.cat";
+        player_not_found.setEmail(email_error);
+        player_not_found.setUsername(username);
+        player_not_found.setPassword("password");
+
+        //playerrepo.findByEmail(email);
     }
 
     @And("^It has not been created any invitation$")
@@ -92,14 +84,28 @@ public class InvitePlayertepdefs {
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-
     }
 
     //Scenario 2
     @And("^It has been invited to game the player with email \"([^\"]*)\" and message \"([^\"]*)\"$")
     public void itHasBeenInvitedToGameThePlayerWithEmailAndMessage(String arg0, String arg1) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
 
-        //playerrepo.save(player_invited);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/invitations/")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @And("^There is a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
+    public void thereIsAPlayerWithUsernameAndEmail(String username, String email) throws Throwable {
+
+        Player player_invited= new Player();
+        player_invited.setEmail(email);
+        player_invited.setUsername(username);
+        player_invited.setPassword("password");
+
+        playerrepo.save(player_invited);
     }
 }
