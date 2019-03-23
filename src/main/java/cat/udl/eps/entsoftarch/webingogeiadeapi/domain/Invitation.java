@@ -26,17 +26,9 @@ public class Invitation {
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
-    private User user_created;
-
-    @ManyToOne
-    @JsonIdentityReference(alwaysAsId = true)
     private  Player player_invited;
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private Player player_who_invited;
-
-    @ManyToOne
-    @JsonIdentityReference(alwaysAsId = true)
-    private	Game invitedtogame;
 }

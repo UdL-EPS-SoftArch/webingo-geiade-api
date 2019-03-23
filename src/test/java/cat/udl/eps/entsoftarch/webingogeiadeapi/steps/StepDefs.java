@@ -68,22 +68,11 @@ public class StepDefs {
             result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
     }
 
-    @And("^The game has already finished or is underway$")
-    public void theGameHasAlreadyFinishedOrIsUnderway() {
-
+    @Then("^The invitation is accepted$")
+    public void theInvitationIsAccepted() {
     }
 
     @And("^The player has not been added to the game$")
     public void thePlayerHasNotBeenAddedToTheGame() {
-    }
-
-    @And("^Time \"([^\"]*)\" has been exceeded$")
-    public void timeHasBeenExceeded(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @Then("^The invitation is accepted$")
-    public void theInvitationIsAccepted() {
     }
 }
