@@ -16,6 +16,7 @@ import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
 
 import java.rmi.UnexpectedException;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,19 +34,26 @@ public class InvitePlayertepdefs {
 
     @Autowired
     private UserRepository playerrepo;
+    //BBDD of existing players
 
     @Autowired
     private InvitationRepository invitationrepo;
+    //BBDD of active invitations
+
+    private Invitation game_invitation;
 
     //Scenario 1
-    @WithMockUser (username="admin",roles={"USER","ADMIN"})
+    @WithMockUser
     @When("^I invite a new player to the game with email \"([^\"]*)\" and message \"([^\"]*)\"$")
     public void iInviteANewPlayerToTheGameWithUsernameAndMessage(String message, String email) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
 
-        Invitation game_invitation = new Invitation();
+        this.game_invitation = new Invitation();
         game_invitation.setMessage(message);
-        game_invitation.setPlayer_invited((Player)playerrepo.findByEmail(email));
+        Player invited = (Player)playerrepo.findByEmail(email);
+        game_invitation.setPlayer_invited(invited);
+
+        //invitationrepo.save(game_invitation);
 
         String invitation = stepDefs.mapper.writeValueAsString(game_invitation);
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -55,6 +63,7 @@ public class InvitePlayertepdefs {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
+
     }
 
     @And("^There is a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
@@ -63,14 +72,27 @@ public class InvitePlayertepdefs {
         Player player_invited= new Player();
         player_invited.setEmail(email);
         player_invited.setUsername(username);
+        player_invited.setPassword("password");
+
         playerrepo.save(player_invited);
+    }
+
+    @And("^There is not a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
+    public void thereIsNotAPlayerWithUsernameAndEmail(String username, String email) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        playerrepo.findByEmail(email);
     }
 
     @And("^It has not been created any invitation$")
     public void itHasNotBeenCreatedAnyInvitation() throws Exception {
-       if (invitationrepo.count() != 0) {
-           throw new UnexpectedException("The invitation repo it's not zero!!");
-       }
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/invitations/{id}", this.game_invitation.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
     }
 
     //Scenario 2
