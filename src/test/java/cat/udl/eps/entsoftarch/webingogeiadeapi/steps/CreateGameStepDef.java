@@ -48,4 +48,16 @@ public class CreateGameStepDef {
                 .andExpect(jsonPath("$.name", is(name)));
     }
 
+    @When("^I register another game with name \"([^\"]*)\"$")
+    public void iRegisterAnotherGameWithName(String name) throws Throwable {
+        JSONObject game1 = new JSONObject();
+        game1.put("name", name);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/games")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(game1.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
 }
