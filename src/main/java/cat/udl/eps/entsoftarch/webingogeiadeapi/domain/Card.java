@@ -16,5 +16,5 @@ public class Card {
     @Id
     private int id;
     private int [][] nums;
-    private float price;
+    private int price;
 }
