@@ -16,7 +16,7 @@ skinparam class {
 class Card <<Card>> {
     Integer id
     List <int> [rows][columns]
-    Float price
+    Integer price
 }
 
 class Invitation <<Invitation>> {
@@ -24,6 +24,10 @@ class Invitation <<Invitation>> {
     Integer id_game
     Player from
     Player to
+    Boolean isUnderWay
+    Boolean isAccepted
+    Boolean timeout
+    String message
 }
 
 class Game <<Game>> {
