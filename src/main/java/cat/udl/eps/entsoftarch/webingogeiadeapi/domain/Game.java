@@ -27,4 +27,7 @@ public class Game extends UriEntity<Integer>{
     private double linePrice, bingoPrice;
     private Player lineWinner, bingoWinner;
 
+    @Override
+    public Integer getId() {return this.id;}
+
 }

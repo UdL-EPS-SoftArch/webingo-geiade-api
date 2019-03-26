@@ -4,12 +4,12 @@ Feature: Leave Game
   I want to leave a game
 
   Scenario: Leave a game as a player
-    Given I login as "xxx@webingo.cat" with password "password"
-    When I leave a game when I'm playing with username email "xxx@webingo.cat"
-    And Card 1 is removed
-    Then The response code is 200
-    And It has been removed the game in the player with username "xxx@webingo.cat"
-    And Card 1 has been removed
+    Given I login as "player1" with password "password"
+    And Player "xxx@webingo.cat" is in game "game" and playing with card 1
+    When I leave a game when I'm playing with Card 1
+    Then The response code is 404
+    And It has been removed the game in the player with card 1
+
 
 
   Scenario: Leave an game as a player

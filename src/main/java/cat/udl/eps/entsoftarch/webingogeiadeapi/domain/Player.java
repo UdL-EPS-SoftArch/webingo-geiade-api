@@ -15,13 +15,6 @@ public class Player extends User {
 	private int wallet;
 	private boolean isPlaying;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(unique = true)
-	private Game game;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(unique = true)
-	private Card card;
 
 	@Override
 	@Transient
