@@ -27,8 +27,8 @@ public class LeaveGameStepDefs {
     private UserRepository playerRepository;
     private Player player;
 
-    //@Autowired
-    //GameRepository gameRepository;
+    @Autowired
+    GameRepository gameRepository;
     private Game game1;
 
 
@@ -38,13 +38,12 @@ public class LeaveGameStepDefs {
     public void iLeaveAGameWhenIMPlayingWithUsernameEmail(String email) throws Throwable {
         this.player = (Player) playerRepository.findByEmail(email);
         this.game1 = this.player.getIsPlaying();
-        //int id_game = game1.getId();
+        int id_game = game1.getId();
 
-        /*stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/games/{game1}", id_game)
+        stepDefs.result = stepDefs.mockMvc.perform(
+                delete("/games/{id_game}", id_game)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()));
-        */
 
     }
 
@@ -52,7 +51,7 @@ public class LeaveGameStepDefs {
     public void isRemoved(int id_card) throws Exception {
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/cards/{card}", id_card)
+                delete("/cards/{id_card}", id_card)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()));
 
@@ -68,7 +67,7 @@ public class LeaveGameStepDefs {
         int id_game = this.game1.getId();
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/games/{game1}", id_game)
+                get("/games/{id_game}", id_game)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
@@ -80,10 +79,10 @@ public class LeaveGameStepDefs {
     public void cardHasBeenRemoved(int id_card) throws Throwable {
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/cards/{card}", id_card)
+                get("/cards/{id_card}", id_card)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
     }
-
+    
 }

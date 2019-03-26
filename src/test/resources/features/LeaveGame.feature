@@ -16,4 +16,3 @@ Feature: Leave Game
     Given I login as "xxx@webingo.cat" with password "password"
     When I leave a game when I'm not playing with username email "xxx@webingo.cat"
     Then The response code is 409
-    And the error message is "You can't leave this game, you are not playing"
