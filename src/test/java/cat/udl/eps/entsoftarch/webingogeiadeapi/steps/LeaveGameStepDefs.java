@@ -42,17 +42,17 @@ public class LeaveGameStepDefs {
 
         Player jugador = new Player();
         jugador.setEmail(email);
-        jugador.setUsername("xxxx");
+        jugador.setUsername("xxx");
         jugador.setPassword("1234");
-        playerRepository.save(jugador);
+        this.player = playerRepository.save(jugador);
 
         Game joc = new Game();
         joc.setName(game);
-        gameRepository.save(joc);
+        this.game1 = gameRepository.save(joc);
 
         this.card1.setId(id_card);
-        this.card1.setPlayer(jugador);
-        this.card1.setGame(joc);
+        this.card1.setPlayer(this.player);
+        this.card1.setGame(this.game1);
         cardRepository.save(this.card1);
 
 
