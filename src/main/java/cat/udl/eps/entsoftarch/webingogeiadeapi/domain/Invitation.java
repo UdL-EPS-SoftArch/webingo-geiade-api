@@ -32,3 +32,7 @@ public class Invitation {
     @JsonIdentityReference(alwaysAsId = true)
     private Player player_who_invited;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 07b16641a747b3ade5b632311bcc50380e533d4b
