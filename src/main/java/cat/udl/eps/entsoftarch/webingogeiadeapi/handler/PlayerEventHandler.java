@@ -2,6 +2,7 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.handler;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,29 @@ public class PlayerEventHandler {
     @Autowired
     PlayerRepository playerRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @HandleBeforeCreate
     public void handlePlayerPreCreate(Player player) {
         logger.info("Before creating: {}", player.toString());
     }
 
     @HandleBeforeSave
-    public void handlePlayerPreSave(Player player){
+    public void handlePlayerPreSave(Player player) throws UnsupportedOperationException {
+
         logger.info("Before updating: {}", player.toString());
+        Player oldPlayer = (Player) userRepository.findByEmail(player.getEmail());
+        int oldWallet = oldPlayer.getWallet();
+        int currentWallet = player.getWallet();
+
+        if (currentWallet - oldWallet < 5) {
+            throw new UnsupportedOperationException();
+        }
+        else {
+            playerRepository.save(player);
+        }
+
     }
 
     @HandleBeforeDelete
