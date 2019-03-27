@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.*;
-import javax.smartcardio.Card;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
@@ -20,8 +19,10 @@ public class Game extends UriEntity<Integer>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(unique = true)
     private String name;
+
     private int [] nums;
     // private List<Card> cardsInGame, players;
 

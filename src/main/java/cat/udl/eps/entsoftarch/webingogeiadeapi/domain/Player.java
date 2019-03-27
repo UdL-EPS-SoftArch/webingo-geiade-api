@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
@@ -14,14 +15,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 public class Player extends User {
 	private int wallet;
 	private boolean isPlaying;
-	// private List<Game> hasPlayed;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(unique = true)
-	private Game game;
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(unique = true)
-	private Card card;
-
 
 	@Override
 	@Transient
