@@ -2,9 +2,7 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 
 import java.util.Collection;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,4 +15,12 @@ public class Card {
     private int id;
     private int [][] nums;
     private int price;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private Game game;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private Card card;
 }
