@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import cat.udl.eps.entsoftarch.webingogeiadeapi.WebingoGeiAdeApiApplication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
@@ -65,5 +66,13 @@ public class StepDefs {
             result.andExpect(status().reason(is(message)));
         else
             result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
+    }
+
+    @Then("^The invitation is accepted$")
+    public void theInvitationIsAccepted() {
+    }
+
+    @And("^The player has not been added to the game$")
+    public void thePlayerHasNotBeenAddedToTheGame() {
     }
 }

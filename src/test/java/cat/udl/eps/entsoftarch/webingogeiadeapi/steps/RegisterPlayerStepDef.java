@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.json.JSONObject;
@@ -58,4 +59,5 @@ public class RegisterPlayerStepDef {
             .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
   }
+
 }
