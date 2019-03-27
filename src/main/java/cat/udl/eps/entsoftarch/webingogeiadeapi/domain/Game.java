@@ -17,8 +17,10 @@ public class Game extends UriEntity<Integer>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(unique = true)
     private String name;
+
     private int [] nums;
     // private List<Card> cardsInGame, players;
     private double linePrice, bingoPrice;

@@ -21,6 +21,14 @@ public class Card {
     private int [][] nums = new int [3][5];
     private int price;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private Game game;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private Card card;
+
     public int[][] randomcard(){
         Random rand = new Random();
         int [][] numeros = new int [3][5];
