@@ -20,8 +20,9 @@ public class Game extends UriEntity<Integer>{
     @Column(unique = true)
     private String name;
     private int [] nums;
+    private boolean isFinished;
     // private List<Card> cardsInGame, players;
-    private double linePrice, bingoPrice;
+    private double linePrize, bingoPrize;
     private Player lineWinner, bingoWinner;
 
     @Override
