@@ -40,11 +40,12 @@ public class LeaveGameStepDefs {
     public void playerIsInGameAndPlayingWithCard(String email, String game, int id_card) throws Throwable {
         //this.player = (Player) playerRepository.findByEmail(email);
 
-        Player jugador = new Player();
+        /*Player jugador = new Player();
         jugador.setEmail(email);
         jugador.setUsername("xxx");
-        jugador.setPassword("1234");
-        this.player = playerRepository.save(jugador);
+        jugador.setPassword("1234");*/
+
+        this.player = (Player) playerRepository.findByEmail(email);
 
         Game joc = new Game();
         joc.setName(game);
