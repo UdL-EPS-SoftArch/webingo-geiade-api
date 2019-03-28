@@ -26,20 +26,17 @@ public class DepositMoneyStepDef {
     @Autowired
     private StepDefs stepDefs;
 
+    private Player player;
+
     @When("^As \"([^\"]*)\" I deposit money (\\d+) euros in my wallet$")
     public void asIDepositMoneyEurosInMyWallet(String username, int cash) throws Throwable {
-        Player player = (Player) playerRepository.findByEmail(username);
-        // player.setWallet(cash);
-        // playerRepository.save(player);
-
-        String message = stepDefs.mapper.writeValueAsString(player);
-        System.out.println(message);
+        this.player = (Player) playerRepository.findByEmail(username);
 
         JSONObject playerObject = new JSONObject();
-        playerObject.put("wallet", player.getWallet() + cash);
+        playerObject.put("toWallet", cash);
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                patch("/players/{username}", player.getUsername())
+                patch("/players/{username}", this.player.getUsername())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(playerObject.toString())
                     .accept(MediaType.APPLICATION_JSON)
@@ -54,6 +51,7 @@ public class DepositMoneyStepDef {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.wallet", is(cash)));
     }
 

@@ -37,14 +37,15 @@ public class PlayerEventHandler {
     public void handlePlayerPreSave(Player player) throws UnsupportedOperationException {
 
         logger.info("Before updating: {}", player.toString());
-        Player oldPlayer = (Player) userRepository.findByEmail(player.getEmail());
-        int oldWallet = oldPlayer.getWallet();
-        int currentWallet = player.getWallet();
+        int wallet = player.getWallet();
+        int value = player.getToWallet();
 
-        if (currentWallet - oldWallet < 5) {
+        if ( value < 5) {
             throw new UnsupportedOperationException();
         }
         else {
+            player.setWallet(wallet+value);
+            player.setToWallet(0);
             playerRepository.save(player);
         }
 
