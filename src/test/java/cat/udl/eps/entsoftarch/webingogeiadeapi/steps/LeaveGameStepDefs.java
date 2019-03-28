@@ -6,7 +6,9 @@ import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.GameRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.CardRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import cucumber.api.PendingException;
+import cucumber.api.java.en.Given;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.junit.Test;
@@ -26,7 +28,7 @@ public class LeaveGameStepDefs {
 
     @Autowired
     private UserRepository playerRepository;
-    private Player player;
+    private Player player1;
 
     @Autowired
     GameRepository gameRepository;
@@ -36,83 +38,47 @@ public class LeaveGameStepDefs {
     CardRepository cardRepository;
     private Card card1;
 
-    @And("^Player \"([^\"]*)\" is in game \"([^\"]*)\" and playing with card (\\d+)$")
+    @Given("^Player \"([^\"]*)\" is in game \"([^\"]*)\" and playing with card (\\d+)$")
     public void playerIsInGameAndPlayingWithCard(String email, String game, int id_card) throws Throwable {
-        //this.player = (Player) playerRepository.findByEmail(email);
 
-        /*Player jugador = new Player();
-        jugador.setEmail(email);
-        jugador.setUsername("xxx");
-        jugador.setPassword("1234");*/
+        this.player1 = new Player();
+        this.game1 = new Game();
+        this.card1 = new Card();
 
-        this.player = (Player) playerRepository.findByEmail(email);
+        this.player1 = (Player) playerRepository.findByEmail(email);
 
-        Game joc = new Game();
-        joc.setName(game);
-        this.game1 = gameRepository.save(joc);
+        this.game1.setName(game);
+        gameRepository.save(this.game1);
 
         this.card1.setId(id_card);
-        this.card1.setPlayer(this.player);
+        this.card1.setPlayer(this.player1);
         this.card1.setGame(this.game1);
         cardRepository.save(this.card1);
 
-
+        String card_created = stepDefs.mapper.writeValueAsString(this.card1);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/cards")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(card_created)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
 
     }
 
-    /*@When("^I leave a game when I'm playing with username email \"([^\"]*)\"$")
-    public void iLeaveAGameWhenIMPlayingWithUsernameEmail(String email) throws Throwable {
-        this.player.setGame(new Game());
-        this.game1 = this.player.getGame();
-        //int id_game = game1.getId();
+    @When("^I leave a game when I'm playing with a Card")
+    public void iLeaveAGameWhenIMPlayingWithCard() throws Throwable{
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/games/{id_game}", id_game)
+                delete("/cards/{id_card}", this.game1.getId())
                         .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()));
-
-    }*/
-
-
-    @When("^I leave a game when I'm playing with Card (\\d+)$")
-    public void iLeaveAGameWhenIMPlayingWithCard(int id_card) throws Throwable{
-
-        stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/cards/{id_card}", id_card)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()));
+                        .with(authenticate()))
+                        .andExpect(status().isNoContent());
     }
 
-   /* @And("^Card (\\d+) is removed$")
-    public void isRemoved(int id_card) throws Exception {
-
-        stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/cards/{id_card}", id_card)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()));
-
-        // esborrar associacio resource delete el subrecurs(5.4.1)
-
-    }
-    */
 
 
     //-------- T H E N ---------------
-    
-    /*@And("^It has been removed the game in the player with username \"([^\"]*)\"$")
-    public void itHasBeenRemovedTheGameInThePlayerWithUsername(String email) throws Throwable {
-
-        this.player = (Player) playerRepository.findByEmail(email);
-        this.game1 = this.player.getGame();
-
-        int id_game = this.game1.getId();
-
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/games/{id_game}", id_game)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-
-    }*/
 
     @And("^It has been removed the game in the player with card (\\d+)$")
     public void itHasBeenRemovedTheGameInThePlayerWithCard(int id_card) throws Throwable{
@@ -127,14 +93,44 @@ public class LeaveGameStepDefs {
     }
 
 
-    /*@And("^Card (\\d+) has been removed$")
-    public void cardHasBeenRemoved(int id_card) throws Throwable {
+    // SCENARIO 2
+
+    @Given("^There is card (\\d+) in the game \"([^\"]*)\" without a player$")
+    public void thereIsCardInTheGameWithoutAPlayer(int id_card, String game) throws Throwable {
+
+        this.player1 = new Player();
+        this.game1 = new Game();
+        this.card1 = new Card();
+
+        this.game1.setName(game);
+        gameRepository.save(this.game1);
+
+        this.card1.setId(id_card);
+        this.card1.setPlayer(this.player1);
+        this.card1.setGame(this.game1);
+        cardRepository.save(this.card1);
+
+        String card_created = stepDefs.mapper.writeValueAsString(this.card1);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/cards")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(card_created)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+
+    @When("^I leave a game when I'm not playing$")
+    public void iLeaveAGameWhenIMNotPlaying() throws Throwable {
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/cards/{id_card}", id_card)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                delete("/cards/{id_card}", this.game1.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(authenticate()))
+                .andExpect(status().isNoContent());
 
-    }*/
+    }
+
 
 }
