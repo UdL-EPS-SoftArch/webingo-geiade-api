@@ -34,48 +34,110 @@ public class JoinGameStepdefs {
 
     @Autowired
     UserRepository playerRepository;
+    @Autowired
     GameRepository gameRepository;
+    @Autowired
     CardRepository cardRepository;
 
-    private Player player;
-    private Game game;
     private double pricebefore;
     private int walletbefore;
+    private int game_id;
+    private int card_id;
 
-
-    @When("^I join to a game with name \"([^\"]*)\"$")
-    public void iJoinToAGameWithName(String name) throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/games/{name}", name)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
-                //.andExpect(status().isOk);
-        
-    }
 
     @And("^existing game with name \"([^\"]*)\"$")
-    public void existingGameWithname(String name) throws Throwable {
+    public void existingGameWithname(String name){
         Game joc = new Game();
         joc.setName(name);
-        this.game = gameRepository.save(joc);
-    }
-
-    @And("^the player \"([^\"]*)\" has more wallet than price$")
-    public void thePlayerHasMoreWalletThanPrice(String email, int price) throws Throwable{
-        this.player = (Player)playerRepository.findByEmail(email);
-        this.player.setWallet(10);
-        playerRepository.save(this.player);
-        assertThat(player.getWallet(), greaterThanOrEqualTo (price));
+        Game g = gameRepository.save(joc);
+        this.game_id= g.getId();
+        this.pricebefore = g.getBingoPrice();
     }
 
 
-    @And("^a new Card is added to the player$")
-    public void aNewCardIsAddedToThePlayer() throws Throwable {
-        Card carta = new Card();
-        carta.setNums(carta.randomcard());
-        //carta.set
-        //card.player = this.player; falta que s'actualitzi el model
+    @And("^the player \"([^\"]*)\" has more wallet than price (\\d+)$")
+    public void thePlayerHasMoreWalletThanPrice(String email, int price) {
+        Player p = (Player)playerRepository.findByEmail(email);
+        p.setWallet(10);
+        playerRepository.save(p);
+        this.walletbefore = p.getWallet();
+        assertThat(p.getWallet(), greaterThanOrEqualTo (price));
+    }
+
+    @And("^the player \"([^\"]*)\" has less money (\\d+)$")
+    public void thePlayerHasLessMoney(String email, int price){
+        Player p = (Player) playerRepository.findByEmail(email);
+        p.setWallet(2);
+        playerRepository.save(p);
+        assertThat(p.getWallet(), lessThan (price));
+    }
+
+    @And("^the boolean of beingplaying was not activated for user \"([^\"]*)\"$")
+    public void theBooleanOfBeingplayingWasNotActivatedForUser(String email) {
+        Player p = (Player) playerRepository.findByEmail(email);
+        p.setPlaying(false);
+        playerRepository.save(p);
+    }
+
+    @And("^a new card has been created \"([^\"]*)\"$")
+    public void aNewCardHasBeenCreated(String email) throws Throwable {
+        Player p = (Player)playerRepository.findByEmail(email);
+        Game g = gameRepository.findById(game_id);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/cards/{id}", this.card_id)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.player",is(p.getUri())))
+                .andExpect(jsonPath("$.game",is(g.getUri())));
+    }
+
+    @And("^the boolean of beingplaying has been activated \"([^\"]*)\"$")
+    public void theBooleanOfBeingplayingHasBeenActivated(String email) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/players/{email}", email)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.isplaying",is(true)));
+    }
+
+
+    @And("^the jackpot has increased by (\\d+)$")
+    public void theJackpotHasIncreasedBy(int price) throws Throwable{
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/games/{id}", this.game_id)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.bingoPrice",is(this.pricebefore+price)));
+    }
+
+
+    @And("^the wallet has decreased by (\\d+) for \"([^\"]*)\"$")
+    public void theWalletHasDecreasedByFor(int price, String email) throws Throwable {
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/players/{email}", email)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.wallet",is(this.walletbefore+price)));
+    }
+
+    @And("^the boolean of beingplaying of player \"([^\"]*)\" was activated$")
+    public void theBooleanOfBeingplayingOfPlayerWasActivated(String email) {
+        Player p = (Player)playerRepository.findByEmail(email);
+        p.setPlaying(true);
+        playerRepository.save(p);
+    }
+
+
+    @When("^user \"([^\"]*)\" join to a game$")
+    public void userJoinToAGame(String email) throws Throwable {
+        Game g = gameRepository.findById(game_id);
+        JSONObject card = new JSONObject();
+        card.put("game", g.getUri());
+        card.put("price",2);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/cards")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -83,47 +145,9 @@ public class JoinGameStepdefs {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
-    }
 
-    @And("^the jackpot is increased by (\\d+)$")
-    public void theJackpotIsIncreasedBy(int price) throws Throwable{
-        this.pricebefore=this.game.getBingoPrice();
-        this.game.setBingoPrice(this.pricebefore+price);
-        gameRepository.save(this.game);
-    }
-
-    @And("^the player \"([^\"]*)\" has less money$")
-    public void thePlayerHasLessMoney(String email, int price) throws Throwable {
-        this.player = (Player) playerRepository.findByEmail(email);
-        assertThat(player.getWallet(), lessThan (price));
-    }
-
-    @And("^the wallet is decreased by (\\d+)$")
-    public void theWalletIsDecreasedBy(int price) throws Throwable{
-        this.walletbefore=this.player.getWallet();
-        this.player.setWallet(this.walletbefore+price);
-        playerRepository.save(this.player);
-    }
-
-    @And("^the jackpot has increased by (\\d+)$")
-    public void theJackpotHasIncreasedBy(int price) throws Throwable{
-        String email = this.player.getEmail();
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/players/{email}", email)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.price",is(this.pricebefore+price)));
-    }
-
-    @And("^the wallet has decreased by (\\d+)$") // arreglar aixo
-    public void theWalletHasDecreasedBy(int price) throws Throwable{
-        String name = this.game.getName();
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/games/{name}", name)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.wallet",is(this.walletbefore+price)));
+        Player p = (Player) playerRepository.findByEmail(email);
+        Card c = cardRepository.findByPlayer(p);
+        this.card_id = c.getId();
     }
 }

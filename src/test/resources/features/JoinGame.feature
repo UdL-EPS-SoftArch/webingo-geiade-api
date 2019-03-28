@@ -5,36 +5,35 @@ Feature: Join Game
 
   Scenario: Join a game as  a player
     Given I login as "admin" with password "password"
-    And existing game with name "x"
-    And the player "player@webingo.org" has more wallet than price
-    When I join to a game with name "game"
-    And a new Card is added to the player
-    And the game is added to the player
-    And the jackpot is increased by 3
-    And the wallet is decreased by 3
+    And existing game with name "game"
+    And I login as "player1@webingo.org" with password "password"
+    And the player "player1@webingo.org" has more wallet than price 3
+    And the boolean of beingplaying was not activated for user "player1@webingo.org"
+    When user "player1@webingo.org" join to a game
     Then The response code is 201
-    And a new card has been added to the player
-    And the game has been added to the player
+    And a new card has been created "player1@webingo.org"
+    And the boolean of beingplaying has been activated "player1@webingo.org"
     And the jackpot has increased by 3
-    And the wallet has decreased by 3
+    And the wallet has decreased by 3 for "player1@webingo.org"
 
 
   Scenario: Join an unexisting game as a player
-    Given I login as "player" with password "password"
-    When I join to a game with name "game"
+    Given I login as "player1@webingo.org" with password "password"
+    When user "player1@webingo.org" join to a game
     Then The response code is 404
 
 
   Scenario: Join a game as a player without money
-    Given I login as "player" with password "password"
+    Given I login as "player1@webingo.org" with password "password"
     And existing game with name "game"
-    And the player "player@webingo.org" has less money
-    When I join to a game with name "game"
-    Then The response code is 406
+    And the player "player1@webingo.org" has less money 3
+    When user "player1@webingo.org" join to a game
+    Then The response code is 401
 
   Scenario: Join a game as a player and this player is already playing in another game
-    Given I login as "player" with password "password"
-    And im already playing
-    When I join to a game with name "game"
-    Then The response code is 406
+    Given I login as "player1@webingo.org" with password "password"
+    And existing game with name "game"
+    And the boolean of beingplaying of player "player1@webingo.org" was activated
+    When user "player1@webingo.org" join to a game
+    Then The response code is 401
 

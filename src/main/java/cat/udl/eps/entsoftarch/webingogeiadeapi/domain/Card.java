@@ -27,19 +27,19 @@ public class Card {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
-    private Card card;
+    private Player player;
 
     public int[][] randomcard(){
         Random rand = new Random();
         int [][] numeros = new int [3][5];
-        for (int i=0; i<=3; i++){
-            for (int j=0; j<=5; j++){
+        for (int i=0; i<3; i++){
+            for (int j=0; j<5; j++){
                 numeros[i][j]= 0;
             }
         }
         int temp;
-        for (int i=0; i<=3; i++){
-            for (int j=0; j<=5; j++){
+        for (int i=0; i<3; i++){
+            for (int j=0; j<5; j++){
                 temp = rand.nextInt(100);
                 while (isAlreadyAdded(numeros,temp)==true){
                     temp = rand.nextInt(100);
@@ -51,8 +51,8 @@ public class Card {
     }
 
     private boolean isAlreadyAdded(int [][]nums, int x){
-        for (int i=0; i<=3; i++){
-            for (int j=0; j<=5; j++){
+        for (int i=0; i<3; i++){
+            for (int j=0; j<5; j++){
                 if (x == nums[i][j]){
                     return true;
                 }

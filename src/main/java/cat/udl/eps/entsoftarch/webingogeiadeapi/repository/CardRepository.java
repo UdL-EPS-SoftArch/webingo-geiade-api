@@ -1,6 +1,7 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.repository;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Card;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
@@ -14,4 +15,6 @@ public interface CardRepository extends PagingAndSortingRepository<Card, Integer
    */
   //List<Game> findByNameContaining(@Param("text") String text);
   Card findById(int id);
+
+  Card findByPlayer(Player p);
 }
