@@ -29,11 +29,19 @@ public class DepositMoneyStepDef {
     @When("^As \"([^\"]*)\" I deposit money (\\d+) euros in my wallet$")
     public void asIDepositMoneyEurosInMyWallet(String username, int cash) throws Throwable {
         Player player = (Player) playerRepository.findByEmail(username);
-        player.setWallet(cash);
-        playerRepository.save(player);
+        // player.setWallet(cash);
+        // playerRepository.save(player);
+
+        String message = stepDefs.mapper.writeValueAsString(player);
+        System.out.println(message);
+
+        JSONObject playerObject = new JSONObject();
+        playerObject.put("wallet", player.getWallet() + cash);
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                patch("/players/{username}", username)
+                patch("/players/{username}", player.getUsername())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(playerObject.toString())
                     .accept(MediaType.APPLICATION_JSON)
                     .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
