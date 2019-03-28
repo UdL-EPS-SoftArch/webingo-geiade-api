@@ -7,8 +7,7 @@ import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import cucumber.api.PendingException;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,11 +26,22 @@ public class DepositMoneyStepDef {
     @Autowired
     private StepDefs stepDefs;
 
+    private Player player;
+
     @When("^As \"([^\"]*)\" I deposit money (\\d+) euros in my wallet$")
     public void asIDepositMoneyEurosInMyWallet(String username, int cash) throws Throwable {
-        Player player = (Player) playerRepository.findByEmail(username);
-        player.setWallet(cash);
-        playerRepository.save(player);
+        this.player = (Player) playerRepository.findByEmail(username);
+
+        JSONObject playerObject = new JSONObject();
+        playerObject.put("toWallet", cash);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/players/{username}", this.player.getUsername())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(playerObject.toString())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 
     @And("^\"([^\"]*)\" wallet is (\\d+)$")
@@ -41,12 +51,14 @@ public class DepositMoneyStepDef {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.wallet", is(cash)));
     }
 
     @When("^As \"([^\"]*)\" I deposit (\\d+) euros in \"([^\"]*)\"$")
-    public void asIDepositEurosIn(String arg0, int arg1, String arg2) throws Throwable {
+    public void asIDepositEurosIn(String username, int money, String username2) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
+        // AQUI S'HAURIA D?AFEGIR UN PATCH/PUT O AMB EL REPOSITORY
 
     }
 }
