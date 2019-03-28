@@ -7,8 +7,7 @@ import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import cucumber.api.PendingException;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,6 +31,12 @@ public class DepositMoneyStepDef {
         Player player = (Player) playerRepository.findByEmail(username);
         player.setWallet(cash);
         playerRepository.save(player);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/players/{username}", username)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 
     @And("^\"([^\"]*)\" wallet is (\\d+)$")
@@ -45,8 +50,9 @@ public class DepositMoneyStepDef {
     }
 
     @When("^As \"([^\"]*)\" I deposit (\\d+) euros in \"([^\"]*)\"$")
-    public void asIDepositEurosIn(String arg0, int arg1, String arg2) throws Throwable {
+    public void asIDepositEurosIn(String username, int money, String username2) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         // AQUI S'HAURIA D?AFEGIR UN PATCH/PUT O AMB EL REPOSITORY
+
     }
 }
