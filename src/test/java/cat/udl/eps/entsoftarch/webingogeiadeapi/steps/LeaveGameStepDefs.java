@@ -70,10 +70,10 @@ public class LeaveGameStepDefs {
     public void iLeaveAGameWhenIMPlayingWithCard() throws Throwable{
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/cards/{id_card}", this.game1.getId())
+                delete("/cards/{id_card}", this.card1.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()))
-                        .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent());
     }
 
 
@@ -106,7 +106,6 @@ public class LeaveGameStepDefs {
         gameRepository.save(this.game1);
 
         this.card1.setId(id_card);
-        this.card1.setPlayer(this.player1);
         this.card1.setGame(this.game1);
         cardRepository.save(this.card1);
 
@@ -125,12 +124,16 @@ public class LeaveGameStepDefs {
     public void iLeaveAGameWhenIMNotPlaying() throws Throwable {
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                delete("/cards/{id_card}", this.game1.getId())
+                delete("/cards/player/{id_player}", this.player1.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isUnauthorized());
 
     }
 
 
+    @And("^The system throws an error$")
+    public void theSystemThrowsAnError() {
+
+    }
 }
