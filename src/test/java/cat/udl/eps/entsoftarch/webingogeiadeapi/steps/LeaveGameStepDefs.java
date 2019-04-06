@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import static cat.udl.eps.entsoftarch.webingogeiadeapi.steps.AuthenticationStepDefs.authenticate;
+import static java.util.Optional.empty;
+import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.MatcherAssert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -83,7 +86,7 @@ public class LeaveGameStepDefs {
     @And("^It has been removed the game in the player with card (\\d+)$")
     public void itHasBeenRemovedTheGameInThePlayerWithCard(int id_card) throws Throwable{
 
-        this.card1 = cardRepository.findById(id_card);
+        //this.card1 = cardRepository.findById(id_card);
 
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/cards/{id_card}", id_card)
@@ -123,17 +126,28 @@ public class LeaveGameStepDefs {
     @When("^I leave a game when I'm not playing$")
     public void iLeaveAGameWhenIMNotPlaying() throws Throwable {
 
+        this.player1=this.card1.getPlayer();
+
+        //assertThat(player1, is(empty()));
+
         stepDefs.result = stepDefs.mockMvc.perform(
+                get("/cards/player/{id_player}", this.player1.getId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        /*stepDefs.result = stepDefs.mockMvc.perform(
                 delete("/cards/player/{id_player}", this.player1.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(authenticate()))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isExpectationFailed());*/
 
     }
 
 
     @And("^The system throws an error$")
     public void theSystemThrowsAnError() {
+
+        //escriure saltar excepcio
 
     }
 }
