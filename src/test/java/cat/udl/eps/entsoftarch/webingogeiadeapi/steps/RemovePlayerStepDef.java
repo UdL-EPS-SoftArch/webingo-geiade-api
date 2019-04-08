@@ -7,10 +7,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import static cat.udl.eps.entsoftarch.webingogeiadeapi.steps.AuthenticationStepDefs.authenticate;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class RemovePlayerStepDef {
@@ -18,14 +21,19 @@ public class RemovePlayerStepDef {
     @Autowired
     private StepDefs stepDefs;
 
-    //Scenario 1 - Remove a player as admin
-    @And("^There is player with username \"([^\"]*)\", email \"([^\"]*)\" and password \"([^\"]*)\"$")
-    public void thereIsPlayerWithUsernameEmailAndPassword(String username, String email, String password) throws JSONException {
 
-        JSONObject player_register = new JSONObject();
-        player_register.put("username", username);
-        player_register.put("email", email);
-        player_register.put("password", password);
+    //Scenario 1 - Remove a player as admin
+    @And("^There is player with username \"([^\"]*)\", email \"([^\"]*)\"$")
+    public void thereIsPlayerWithUsernameEmailAndPassword(String username, String email) throws Throwable {
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/players/{username}", username)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email", is(email)));
+
+
     }
 
     @When("^I remove a player with username \"([^\"]*)\"$")
@@ -80,7 +88,7 @@ public class RemovePlayerStepDef {
         stepDefs.result = stepDefs.mockMvc.perform(
                 delete("/players/{username}", username)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
 
