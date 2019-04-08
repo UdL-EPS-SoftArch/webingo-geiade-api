@@ -1,6 +1,7 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.handler;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.handler.exception.DepositMoneyException;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import org.slf4j.Logger;
@@ -15,7 +16,12 @@ import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeLinkSave;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Component
 @RepositoryEventHandler
@@ -34,22 +40,26 @@ public class PlayerEventHandler {
     }
 
     @HandleBeforeSave
-    public void handlePlayerPreSave(Player player) throws UnsupportedOperationException {
+    public void handlePlayerPreSave(Player player) throws DepositMoneyException {
 
         logger.info("Before updating: {}", player.toString());
         int wallet = player.getWallet();
         int value = player.getToWallet();
 
         if ( value < 5) {
-            throw new UnsupportedOperationException();
+            throw new DepositMoneyException("Not enought money");
         }
         else {
             player.setWallet(wallet+value);
             player.setToWallet(0);
+            System.out.println(player.toString());
+
             playerRepository.save(player);
         }
 
     }
+
+
 
     @HandleBeforeDelete
     public void handlePlayerPreDelete(Player player){

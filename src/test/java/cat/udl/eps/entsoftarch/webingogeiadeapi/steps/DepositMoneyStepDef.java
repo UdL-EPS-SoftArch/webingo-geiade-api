@@ -46,8 +46,21 @@ public class DepositMoneyStepDef {
 
     @And("^\"([^\"]*)\" wallet is (\\d+)$")
     public void walletIs(String username, int cash) throws Throwable {
+        this.player = (Player) playerRepository.findByEmail(username);
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/players/{username}", username)
+                get("/players/{username}", this.player.getUsername())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.wallet", is(cash)));
+    }
+
+    @And("^\"([^\"]*)\" wallet is equal (\\d+)$")
+    public void walletIsEqual(String username, int cash) throws Throwable {
+        this.player = (Player) playerRepository.findByEmail(username);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/players/{username}", this.player.getUsername())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
@@ -60,5 +73,21 @@ public class DepositMoneyStepDef {
         // Write code here that turns the phrase above into concrete actions
         // AQUI S'HAURIA D?AFEGIR UN PATCH/PUT O AMB EL REPOSITORY
 
+    }
+
+    @When("^As \"([^\"]*)\" I deposit money - (\\d+) euros in my wallet$")
+    public void asIDepositMoneyEurosInMyWalletNegative(String username, int cash) throws Throwable {
+        this.player = (Player) playerRepository.findByEmail(username);
+
+        JSONObject playerObject = new JSONObject();
+        playerObject.put("toWallet", -cash);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/players/{username}", this.player.getUsername())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerObject.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 }

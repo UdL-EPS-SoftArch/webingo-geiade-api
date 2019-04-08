@@ -5,10 +5,10 @@ Feature: Deposit Money
 
   Scenario: Deposit money as a player
     Given I login as "player1" with password "password"
-    And "player1" wallet is 0
+    And "player1@webingo.org" wallet is 0
     When As "player1@webingo.org" I deposit money 10 euros in my wallet
     Then The response code is 200
-    And  "player1" wallet is 10
+    And  "player1@webingo.org" wallet is equal 10
 
   Scenario: Deposit money to another player
     Given I login as "player1" with password "password"
@@ -22,5 +22,5 @@ Feature: Deposit Money
 
   Scenario: Diposit less quantity than allowed
     Given I login as "player1" with password "password"
-    When As "player1@webingo.org" I deposit money -10 euros in my wallet
+    When As "player1@webingo.org" I deposit money - 10 euros in my wallet
     Then The response code is 406
