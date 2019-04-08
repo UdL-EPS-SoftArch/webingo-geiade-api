@@ -16,12 +16,7 @@ import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeLinkSave;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletResponse;
 
 @Component
 @RepositoryEventHandler

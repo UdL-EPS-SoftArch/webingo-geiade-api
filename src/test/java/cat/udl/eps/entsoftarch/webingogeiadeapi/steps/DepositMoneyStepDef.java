@@ -1,10 +1,7 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.steps;
 
-import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
-import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
-import cucumber.api.PendingException;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -15,8 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
@@ -72,6 +67,8 @@ public class DepositMoneyStepDef {
     public void asIDepositEurosIn(String username, int money, String username2) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         // AQUI S'HAURIA D?AFEGIR UN PATCH/PUT O AMB EL REPOSITORY
+
+        throw new Throwable();
 
     }
 
