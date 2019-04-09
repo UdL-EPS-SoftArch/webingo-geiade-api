@@ -54,12 +54,23 @@ public class DepositMoneyStepDef {
         }*/
     }
 
-    @When("^As \"([^\"]*)\" I deposit (\\d+) euros in \"([^\"]*)\"$")
-    public void asIDepositEurosIn(String username, int money, String username2) throws Throwable {
+    @When("^I deposit (\\d+) euros in \"([^\"]*)\"$")
+    public void asIDepositEurosIn(int cash, String username) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         // AQUI S'HAURIA D?AFEGIR UN PATCH/PUT O AMB EL REPOSITORY
 
-        throw new Throwable();
+        this.player = (Player) playerRepository.findByEmail(username);
+
+        JSONObject playerObject = new JSONObject();
+        playerObject.put("toWallet", cash);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/players/{username}", this.player.getUsername())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerObject.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
 
     }
 

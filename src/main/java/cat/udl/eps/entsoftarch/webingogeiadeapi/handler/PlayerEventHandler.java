@@ -2,6 +2,7 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.handler;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.handler.exception.DepositMoneyException;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.handler.exception.NotAuthorizedException;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.data.rest.core.annotation.HandleBeforeDelete;
 import org.springframework.data.rest.core.annotation.HandleBeforeLinkSave;
 import org.springframework.data.rest.core.annotation.HandleBeforeSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,9 +37,14 @@ public class PlayerEventHandler {
     }
 
     @HandleBeforeSave
-    public void handlePlayerPreSave(Player player) throws DepositMoneyException {
+    public void handlePlayerPreSave(Player player) throws DepositMoneyException, NotAuthorizedException {
 
         logger.info("Before updating: {}", player.toString());
+        // TEST IF WHO IS MAKING THE DEPOSIT IS THE OWNER OF THE WALLET
+        Player p = (Player) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (p.getUsername().equals(player.getUsername()) == false) {
+            throw new NotAuthorizedException("User not authorized to do this");
+        }
         int wallet = player.getWallet();
         int value = player.getToWallet();
 
