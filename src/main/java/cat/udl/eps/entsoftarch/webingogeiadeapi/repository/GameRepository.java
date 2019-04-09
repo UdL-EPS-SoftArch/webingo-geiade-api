@@ -18,4 +18,6 @@ public interface GameRepository extends PagingAndSortingRepository<Game, Integer
    */
   //List<Game> findByNameContaining(@Param("text") String text);
   Game findById(int id);
+
+  Game findByName(String name);
 }
