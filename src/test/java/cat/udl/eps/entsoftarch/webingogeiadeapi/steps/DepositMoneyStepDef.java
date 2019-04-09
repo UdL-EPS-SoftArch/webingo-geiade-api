@@ -42,6 +42,7 @@ public class DepositMoneyStepDef {
     @And("^\"([^\"]*)\" wallet is (\\d+)$")
     public void walletIs(String username, int cash) throws Throwable {
         this.player = (Player) playerRepository.findByEmail(username);
+        // UNAUTHORIZED ERROR AFTER PATCH
         /*stepDefs.result = stepDefs.mockMvc.perform(
                 get("/players/{username}", this.player.getUsername())
                         .accept(MediaType.APPLICATION_JSON)
