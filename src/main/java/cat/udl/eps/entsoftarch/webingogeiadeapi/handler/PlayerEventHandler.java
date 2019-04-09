@@ -49,7 +49,7 @@ public class PlayerEventHandler {
             player.setToWallet(0);
             System.out.println(player.toString());
 
-            playerRepository.save(player);
+            // playerRepository.save(player);
         }
 
     }
