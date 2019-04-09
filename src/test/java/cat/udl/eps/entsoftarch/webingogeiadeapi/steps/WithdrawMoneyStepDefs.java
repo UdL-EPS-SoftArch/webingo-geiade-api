@@ -37,6 +37,11 @@ public class WithdrawMoneyStepDefs {
         // Write code here that turns the phrase above into concrete actions
         player2 = new Player();
         player3 = new Player();
+        this.player2 = (Player) userRepository.findByEmail(email1);
+        this.player3 = (Player) userRepository.findByEmail(email2);
+
+        this.player2.getWallet()
+
     }
 
     @And("^He is not the username \"([^\"]*)\" of that wallet$")
