@@ -12,9 +12,8 @@ Feature: Leave Game
 
 
 
-  Scenario: Leave an game as a player when not playing
+  Scenario: Leave an game as a player but card of another player
     Given I login as "player1" with password "password"
-    Given There is card 1 in the game "game" without a player
-    When I leave a game when I'm not playing
+    And  Player "user@webingo.org" is in game "game" and playing with card 1
+    When I want to leave a game with a card of another player and is not associated with the logged player.
     Then The response code is 401
-    And The system throws an error
