@@ -34,7 +34,6 @@ public class InvitePlayertepdefs {
 
     @Autowired
     private UserRepository playerrepo;
-    //BBDD of existing players
 
 
     private Invitation game_invitation;
@@ -72,7 +71,6 @@ public class InvitePlayertepdefs {
         player_not_found.setUsername(username);
         player_not_found.setPassword("password");
 
-        //playerrepo.findByEmail(email);
     }
 
     @And("^It has not been created any invitation$")
