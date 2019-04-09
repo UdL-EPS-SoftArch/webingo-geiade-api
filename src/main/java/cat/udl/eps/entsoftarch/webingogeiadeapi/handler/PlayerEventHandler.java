@@ -45,19 +45,17 @@ public class PlayerEventHandler {
         if (p.getUsername().equals(player.getUsername()) == false) {
             throw new NotAuthorizedException("User not authorized to do this");
         }
+
         int wallet = player.getWallet();
         int value = player.getToWallet();
-
         if ( value < 5) {
             throw new DepositMoneyException("Not enought money");
         }
-        else {
-            player.setWallet(wallet+value);
-            player.setToWallet(0);
-            System.out.println(player.toString());
+        player.setWallet(wallet+value);
+        player.setToWallet(0);
+        System.out.println(player.toString());
 
-            // playerRepository.save(player);
-        }
+        // playerRepository.save(player);
 
     }
 
