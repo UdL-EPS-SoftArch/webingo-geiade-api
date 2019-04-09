@@ -4,9 +4,8 @@ Feature: Join Game
   I want to being added to a game
 
   Scenario: Join a game as  a player
-    Given I login as "admin" with password "password"
+    Given I login as "player1" with password "password"
     And existing game with name "game"
-    And I login as "player1@webingo.org" with password "password"
     And the player "player1@webingo.org" has more wallet than price 3
     And the boolean of beingplaying was not activated for user "player1@webingo.org"
     When user "player1@webingo.org" join to a game
@@ -18,22 +17,22 @@ Feature: Join Game
 
 
   Scenario: Join an unexisting game as a player
-    Given I login as "player1@webingo.org" with password "password"
+    Given I login as "player1" with password "password"
     When user "player1@webingo.org" join to a game
-    Then The response code is 404
+    Then The response code is 500
 
 
   Scenario: Join a game as a player without money
-    Given I login as "player1@webingo.org" with password "password"
+    Given I login as "player1" with password "password"
     And existing game with name "game"
     And the player "player1@webingo.org" has less money 3
     When user "player1@webingo.org" join to a game
-    Then The response code is 401
+    Then The response code is 500
 
   Scenario: Join a game as a player and this player is already playing in another game
-    Given I login as "player1@webingo.org" with password "password"
+    Given I login as "player1" with password "password"
     And existing game with name "game"
     And the boolean of beingplaying of player "player1@webingo.org" was activated
     When user "player1@webingo.org" join to a game
-    Then The response code is 401
+    Then The response code is 500
 
