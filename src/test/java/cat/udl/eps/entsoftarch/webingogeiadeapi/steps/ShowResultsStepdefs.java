@@ -84,11 +84,6 @@ public class ShowResultsStepdefs {
         gameRepository.save(g);
     }
 
-    @When("^admin display results of game \"([^\"]*)\"$")
-    public void adminDisplayResultsOfGame(String game) throws Throwable {
-
-    }
-
     @And("^\"([^\"]*)\" has been added at the bingo winner variable of the game \"([^\"]*)\"$")
     public void hasBeenAddedAtTheBingoWinnerVariableOfTheGame(String email, String game) throws Throwable {
         Game g = gameRepository.findByName(game);
