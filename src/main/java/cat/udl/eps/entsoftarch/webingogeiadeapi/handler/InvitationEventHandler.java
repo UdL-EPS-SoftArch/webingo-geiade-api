@@ -20,30 +20,15 @@ public class InvitationEventHandler {
     InvitationRepository invitationRepository;
 
     @HandleBeforeCreate
-    public void handleInvitationPreCreate(Invitation invitation) {
+    public void handleInvitationPreCreate(Invitation invitation) throws InvitationCreateException {
         logger.info("Before creating: {}", invitation.toString());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Player player = (Player) authentication.getPrincipal();
 
         if (invitationRepository.count() > 0) {
-            throw new InvitationCreateException("You have already invited this ");
+            throw new InvitationCreateException("You have already invited this player to this game ");
         }
 
-    }
-
-    @HandleBeforeSave
-    public void handleInvitationPreSave(Invitation invitation){
-        logger.info("Before updating: {}", invitation.toString());
-    }
-
-    @HandleBeforeDelete
-    public void handleInvitationPreDelete(Invitation invitation){
-        logger.info("Before deleting: {}", invitation.toString());
-    }
-
-    @HandleBeforeLinkSave
-    public void handleInvitationPreLinkSave(Invitation invitation, Object o) {
-        logger.info("Before linking: {} to {}", invitation.toString(), o.toString());
     }
 
     @HandleAfterCreate
@@ -61,18 +46,4 @@ public class InvitationEventHandler {
             throw new InvitationCreateException("The invitation has reached the timeout for being accepted");
     }
 
-    @HandleAfterSave
-    public void handleInvitationPostSave(Invitation invitation){
-        logger.info("After updating: {}", invitation.toString());
-    }
-
-    @HandleAfterDelete
-    public void handleInvitationPostDelete(Invitation invitation){
-        logger.info("After deleting: {}", invitation.toString());
-    }
-
-    @HandleAfterLinkSave
-    public void handleInvitationPostLinkSave(Invitation invitation, Object o) {
-        logger.info("After linking: {} to {}", invitation.toString(), o.toString());
-    }
 }
