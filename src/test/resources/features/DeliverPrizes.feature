@@ -2,7 +2,7 @@ Feature: Deliver Prizes
   In order to allow players to gain money with the jackpot
 
   Scenario: The system delivers prizes to two winners done correctly
-    Given There is a game with name "geiade-game" that has finished
+    Given There is a game with named "geiade-game" that has finished
     Given There is a player with email "player1@webingo.cat" and username "player1" who won the line
     Given There is a player with email "player2@webingo.cat" and username "player2" who won the bingo game
     Given There is a line prize and a bingo prize in the current game

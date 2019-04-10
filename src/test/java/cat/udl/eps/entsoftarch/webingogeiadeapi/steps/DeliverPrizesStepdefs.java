@@ -33,13 +33,12 @@ public class DeliverPrizesStepdefs {
     @JsonIdentityReference(alwaysAsId = true)
     private Player bwinner;
 
-    @Given("^There is a game with name \"([^\"]*)\" that has finished$")
+    @Given("^There is a game with named \"([^\"]*)\" that has finished$")
     public void thereIsAGameWithNameThatFinished(String game_name) throws Throwable {
 
         this.game = new Game();
         game.setName(game_name);
         game.setFinished(true);
-
     }
 
     @Given("^There is a player with email \"([^\"]*)\" and username \"([^\"]*)\" who won the line$")
