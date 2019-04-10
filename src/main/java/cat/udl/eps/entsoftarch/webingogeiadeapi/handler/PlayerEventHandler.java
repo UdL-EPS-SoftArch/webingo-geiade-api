@@ -86,8 +86,10 @@ public class PlayerEventHandler {
     @HandleAfterSave
     public void handlePlayerPostSave(Player player){
         logger.info("After updating: {}", player.toString());
-        player.encodePassword();
-        playerRepository.save(player);
+        if (player.isPasswordEncoded() == false) {
+            player.encodePassword();
+            playerRepository.save(player);
+        }
     }
 
     @HandleAfterDelete
