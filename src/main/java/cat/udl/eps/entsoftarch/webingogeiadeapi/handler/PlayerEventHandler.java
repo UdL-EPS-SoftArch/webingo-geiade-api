@@ -46,14 +46,19 @@ public class PlayerEventHandler {
             throw new NotAuthorizedException("User not authorized to do this");
         }
 
-        int wallet = player.getWallet();
-        int value = player.getToWallet();
-        if ( value < 5) {
-            throw new DepositMoneyException("Not enought money");
+        if (player.getToWallet() != 0) {
+            int wallet = player.getWallet();
+            int value = player.getToWallet();
+            if (value < 5) {
+                throw new DepositMoneyException("Not enought money");
+            }
+            player.setWallet(wallet + value);
+            player.setToWallet(0);
+            System.out.println(player.toString());
         }
-        player.setWallet(wallet+value);
-        player.setToWallet(0);
-        System.out.println(player.toString());
+        else if (player.getFromWallet() != 0) {
+            //fer la comprovacio dels minims i maxims a retirar!!!!
+        }
 
         // playerRepository.save(player);
 
