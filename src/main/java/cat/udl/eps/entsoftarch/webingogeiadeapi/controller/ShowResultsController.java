@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @BasePathAwareController
 public class ShowResultsController {
-
+   // @RequestMapping("/games/{lineWinner}")
 
 }

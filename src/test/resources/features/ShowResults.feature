@@ -8,7 +8,7 @@ Feature: ShowResults
     And existing game with name "game"
     And user "player1@webingo.org" join to a game "game"
     And "player1@webingo.org" has won the line for the game "game"
-    When player sing line "game"
+    When player "email" sing line "game"
     Then The response code is 201
     And "player1@webingo.org" has been added at the line winner variable of the game "game"
 
@@ -17,7 +17,7 @@ Feature: ShowResults
     And existing game with name "game"
     And user "player1@webingo.org" join to a game "game"
     And user "player1@webingo.org" join to a game "game"
-    When player sing line "game"
+    When player "email" sing line "game"
     Then The response code is 500
 
 
@@ -26,7 +26,7 @@ Feature: ShowResults
     And existing game with name "game"
     And user "player1@webingo.org" join to a game "game"
     And "player1@webingo.org" has won the bingo for the game "game"
-    When player sing bingo "game"
+    When player "email" sing bingo "game"
     Then The response code is 201
     And "player1@webingo.org" has been added at the bingo winner variable of the game "game"
 
@@ -35,5 +35,5 @@ Feature: ShowResults
     Given I login as "player1" with password "password"
     And existing game with name "game"
     And user "player1@webingo.org" join to a game "game"
-    When player sing line "game"
+    When player "email" sing bingo "game"
     Then The response code is 500

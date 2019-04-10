@@ -97,4 +97,19 @@ public class ShowResultsStepdefs {
         Player p = (Player) playerRepository.findByEmail(email);
         assertThat(g.getLineWinner(), is (p));
     }
+
+
+    @When("^player \"([^\"]*)\" sing line \"([^\"]*)\"$")
+    public void playerSingLine(String email, String game) throws Throwable {
+        Game g = gameRepository.findByName(game);
+        Player p = (Player) playerRepository.findByEmail(email);
+        g.setLineWinner(p);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/games")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(g.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
 }
