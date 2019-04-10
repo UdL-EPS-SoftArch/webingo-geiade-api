@@ -84,7 +84,7 @@ public class JoinGameStepdefs {
         Game g = gameRepository.findById(game_id);
         Card c = cardRepository.findById(card_id);
         assertThat(c.getGame(), is (g));
-        assertThat(c.getPlayer(), is (p));
+        assertThat(c.getPlayer().toString(), is (p.toString()));
 
     }
 
