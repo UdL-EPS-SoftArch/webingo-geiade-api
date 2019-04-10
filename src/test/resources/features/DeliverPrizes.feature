@@ -11,7 +11,6 @@ Feature: Deliver Prizes
     And I delete the bingo and line prizes
     Then The response code is 201
     And I update the wallet of the players who won
-    And I delete the Game???
 
   Scenario: The system delivers prizes correctly to the same player who won the lineprize and the bingorize
     Given There is a game with name "geiade-game" that has finished
