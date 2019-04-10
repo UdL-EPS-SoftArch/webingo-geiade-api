@@ -35,18 +35,20 @@ public class InvitePlayertepdefs {
     @Autowired
     private UserRepository playerrepo;
 
+    @Autowired
+    private InvitationRepository invitationRepository;
 
     private Invitation game_invitation;
 
     //Scenario 1
     @WithMockUser
-    @When("^I invite a new player to the game with email \"([^\"]*)\" and message \"([^\"]*)\"$")
+    @When("^I invite a player to the game with email \"([^\"]*)\" and message \"([^\"]*)\"$")
     public void iInviteANewPlayerToTheGameWithUsernameAndMessage(String message, String email) throws Throwable {
 
         this.game_invitation = new Invitation();
         game_invitation.setMessage(message);
-        Player invited = (Player)playerrepo.findByEmail(email);
-        game_invitation.setPlayer_invited(invited);
+        game_invitation.setPlayer_invited((Player)playerrepo.findByEmail(email));
+        game_invitation.setId_game(6);
         game_invitation.setAccepted(false);
         game_invitation.setTimeout(false);
         game_invitation.setUnderway(false);
@@ -71,6 +73,9 @@ public class InvitePlayertepdefs {
         player_not_found.setUsername(username);
         player_not_found.setPassword("password");
 
+        playerrepo.save(player_not_found);
+        playerrepo.findByEmail(email);
+
     }
 
     @And("^It has not been created any invitation$")
@@ -85,8 +90,8 @@ public class InvitePlayertepdefs {
     }
 
     //Scenario 2
-    @And("^It has been invited to game the player with email \"([^\"]*)\" and message \"([^\"]*)\"$")
-    public void itHasBeenInvitedToGameThePlayerWithEmailAndMessage(String arg0, String arg1) throws Throwable {
+    @And("^It has been invited to game the player")
+    public void itHasBeenInvitedToGameThePlayerWithEmailAndMessage() throws Throwable {
 
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/invitations/")
@@ -99,11 +104,34 @@ public class InvitePlayertepdefs {
     @And("^There is a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
     public void thereIsAPlayerWithUsernameAndEmail(String username, String email) throws Throwable {
 
-        Player player_invited= new Player();
-        player_invited.setEmail(email);
-        player_invited.setUsername(username);
-        player_invited.setPassword("password");
+        Player player1= new Player();
+        player1.setEmail(email);
+        player1.setUsername(username);
+        player1.setPassword("password");
 
-        playerrepo.save(player_invited);
+        playerrepo.save(player1);
+    }
+
+    @And("^I already invited the player with email \"([^\"]*)\" and message \"([^\"]*)\"$")
+    public void iAlreadyInvitedThePlayerWithEmailAndMessage(String email, String message) throws Throwable {
+
+        Invitation sameinvitation = new Invitation();
+        sameinvitation.setMessage(message);
+        sameinvitation.setPlayer_invited((Player)playerrepo.findByEmail(email));
+        sameinvitation.setId_game(6);
+        sameinvitation.setAccepted(false);
+        sameinvitation.setTimeout(false);
+        sameinvitation.setUnderway(false);
+
+        invitationRepository.save(sameinvitation);
+
+        String invitation = stepDefs.mapper.writeValueAsString(game_invitation);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/invitations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invitation)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 }
