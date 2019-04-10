@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -105,7 +106,21 @@ public class ShowResultsStepdefs {
         Player p = (Player) playerRepository.findByEmail(email);
         g.setLineWinner(p);
         stepDefs.result = stepDefs.mockMvc.perform(
-                post("/games")
+                patch("/games/{id}", g.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(g.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+    }
+
+    @When("^player \"([^\"]*)\" sing bingo \"([^\"]*)\"$")
+    public void playerSingBingo(String email, String game) throws Throwable {
+        Game g = gameRepository.findByName(game);
+        Player p = (Player) playerRepository.findByEmail(email);
+        g.setBingoWinner(p);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/games/{id}", g.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(g.toString())
                         .accept(MediaType.APPLICATION_JSON)
