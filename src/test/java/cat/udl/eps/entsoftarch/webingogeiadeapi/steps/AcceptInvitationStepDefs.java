@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,17 +64,24 @@ public class AcceptInvitationStepDefs {
 
     @When("^I accept the invitation \"([^\"]*)\"$")
     public void iAcceptTheInvitation(String invitation) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
         invitationRepository.findById(this.invitation.getId());
         this.invitation.setAccepted(true);
-
+        String invite = stepDefs.mapper.writeValueAsString(this.invitation);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/invitations/{id}", this.invitation.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invite)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
 
     }
 
     @And("The game has already finished or is underway$")
-    public void theGameHasAlreadyFinishedOrIsUnderway() {
+    public void theGameHasAlreadyFinishedOrIsUnderway() throws Throwable {
         invitationRepository.findById(this.invitation.getId());
         this.invitation.setUnderway(true);
+        invitationRepository.save(this.invitation);
     }
 
     @And("^Timeout has been exceeded$")
@@ -81,24 +89,24 @@ public class AcceptInvitationStepDefs {
         // Write code here that turns the phrase above into concrete actions
         invitationRepository.findById(this.invitation.getId());
         this.invitation.setTimeout(true);
+        invitationRepository.save(this.invitation);
 
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/invitations/{id}", this.invitation.getId())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(status().isNotAcceptable());
     }
-
-    @And("^The player has not been added to the game$")
-    public void thePlayerHasNotBeenAddedToTheGame() {
-    }
-
 
     @When("^I reject the invitation \"([^\"]*)\"$")
     public void iRejectTheInvitation(String invitation) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
+
+        String invite = stepDefs.mapper.writeValueAsString(this.invitation);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/invitations/{id}", this.invitation.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invite)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
         invitationRepository.findById(this.invitation.getId());
         this.invitation.setAccepted(false);
+        invitationRepository.save(this.invitation);
     }
 }
