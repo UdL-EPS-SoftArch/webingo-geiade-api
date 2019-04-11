@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 
 import static cat.udl.eps.entsoftarch.webingogeiadeapi.steps.AuthenticationStepDefs.authenticate;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -47,33 +46,28 @@ public class LeaveGameStepDefs {
         gameRepository.save(this.game1);
 
         this.card1 = new Card();
-        System.out.println("...................");
-
-
         this.card1.setId(id_card);
         this.card1.setPlayer(this.player1);
         this.card1.setGame(this.game1);
-        //cardRepository.save(this.card1);
+        cardRepository.save(this.card1);
+
+
+        //Intentat fer els "save" amb un Handler pero hi han hagut problemes en la creacio del Handler ja que la creacio
+        //de la carta era buida, quan hauria de sortir plena ja que s'havien actualitzat els seus paramentres previament.
 
         /*JSONObject card = new JSONObject();
         card.put("id", id_card);
         card.put("game", this.game1);
-        card.put("player", this.player1);*/
+        card.put("player", this.player1);
 
-        System.out.println(this.card1);
-        System.out.println("------------");
-
-
-        String card = stepDefs.mapper.writeValueAsString(this.card1);
-        System.out.print("AQUI ");
-        System.out.println(card);
+        String postcard = stepDefs.mapper.writeValueAsString(card);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/cards")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(card)
+                        .content(postcard)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
+                .andDo(print());*/
 
 
 
