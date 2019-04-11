@@ -35,6 +35,7 @@ public class InvitationEventHandler {
     @HandleAfterCreate
     public void handleInvitationPostCreate(Invitation invitation) throws InvitationException{
         logger.info("After creating: {}", invitation.toString());
+        invitationRepository.save(invitation);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Player player_playing = (Player) authentication.getPrincipal();
         invitation.setPlayer_who_invited(player_playing);
@@ -46,15 +47,14 @@ public class InvitationEventHandler {
         else if (invitation.isTimeout())
             throw new InvitationException("The invitation has reached the timeout for being accepted");
 
-        invitationRepository.save(invitation);
     }
 
     @HandleAfterSave
     public void handleInvitationPostSave(Invitation invitation) throws InvitationException{
         logger.info("After updating: {}", invitation.toString());
+        invitationRepository.save(invitation);
         if (invitation.isTimeout())
             throw new InvitationException("The invitation has reached the timeout for being accepted");
-        invitationRepository.save(invitation);
     }
 
 }
