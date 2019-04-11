@@ -57,8 +57,14 @@ public class PlayerEventHandler {
             System.out.println(player.toString());
         }
         else if (player.getFromWallet() != 0) {
-            //fer la comprovacio dels minims i maxims a retirar!!!!
-        }
+            int wallet = player.getWallet();
+            int value = player.getFromWallet();
+            if (value < 5) {
+                throw new DepositMoneyException("Not enought money");
+            }
+            player.setWallet(wallet - value);
+            player.setFromWallet(0);
+            System.out.println(player.toString());        }
 
         // playerRepository.save(player);
 

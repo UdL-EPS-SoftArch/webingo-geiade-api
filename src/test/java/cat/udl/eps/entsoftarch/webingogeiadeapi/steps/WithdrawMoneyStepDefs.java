@@ -6,54 +6,69 @@ import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 
 public class WithdrawMoneyStepDefs {
 
     @Autowired
     private UserRepository userRepository;
-    private Player player1;
-    private Player player2;
-    private Player player3;
 
+    @Autowired
+    private UserRepository playerRepository;
 
-    @When("^I want to get back some of my money (\\d+) from the wallet of \"([^\"]*)\"$")
-    public void iWantToGetBackSomeOfMyMoneyFromTheWalletOf(int money, String email) throws Throwable {
+    @Autowired
+    private StepDefs stepDefs;
 
-        player1 = new Player();
-        this.player1 = (Player) userRepository.findByEmail(email);
-        this.player1.setWallet(this.player1.getWallet()-money);
-        userRepository.save(this.player1);
+    private Player player;
+
+    @And("^\"([^\"]*)\" wallet has (\\d+) euros$")
+    public void walletHasEuros(String username, int money) throws Throwable {
+        this.player = (Player) playerRepository.findByEmail(username);
+        this.player.setWallet(money);
+        playerRepository.save(this.player);
     }
 
-    @And("^Wallet has the correct amount of money left$")
-    public void walletHasTheCorrectAmountOfMoneyLeft() {
+    @When("^As \"([^\"]*)\" I withdraw (\\d+) euros from my wallet$")
+    public void asIWithdrawMoneyEurosFromMyWallet(String username, int money) throws Throwable {
+        this.player = (Player) playerRepository.findByEmail(username);
 
+        JSONObject playerObject = new JSONObject();
+        playerObject.put("fromWallet", money);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/players/{username}", this.player.getUsername())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerObject.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 
-    @When("^I want to get back some money (\\d+) from some wallet of \"([^\"]*)\" with username \"([^\"]*)\"$")
-    public void iWantToGetBackSomeMoneyFromSomeWalletOfWithUsername(int money, String email1, String email2) throws Throwable {
+
+    @When("^I withdraw (\\d+) euros in \"([^\"]*)\"$")
+    public void asIWithdrawEurosIn(int money, String username) throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        player2 = new Player();
-        player3 = new Player();
-        this.player2 = (Player) userRepository.findByEmail(email1);
-        this.player3 = (Player) userRepository.findByEmail(email2);
+        // AQUI S'HAURIA D?AFEGIR UN PATCH/PUT O AMB EL REPOSITORY
 
-        this.player2.getWallet()
+        this.player = (Player) playerRepository.findByEmail(username);
+
+        JSONObject playerObject = new JSONObject();
+        playerObject.put("fromWallet", money);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/players/{username}", this.player.getUsername())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(playerObject.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
 
     }
-
-    @And("^He is not the username \"([^\"]*)\" of that wallet$")
-    public void heIsNotTheUsernameOfThatWallet(String arg0) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
-    }
-
-    @And("^The money has not been withdrawed from the wallet$")
-    public void theMoneyHasNotBeenWithdrawedFromTheWallet() {
-    }
-
-
 
 }
