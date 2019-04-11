@@ -1,6 +1,7 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.handler;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.handler.exception.GameException;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.GameRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,11 @@ public class GameEventHandler {
     @HandleAfterSave
     public void handleGamePostSave(Game game){
         logger.info("After updating: {}", game.toString());
+        if (game.isFinished()) {
+            if ((game.getLineWinner() == null) || (game.getBingoWinner() == null) ) {
+                throw new GameException("Game has finished without a line or bingo winner");
+            }
+        }
     }
 
     @HandleAfterDelete
