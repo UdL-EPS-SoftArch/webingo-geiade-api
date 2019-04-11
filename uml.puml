@@ -34,6 +34,7 @@ class Invitation <<Invitation>> {
 
 class Game <<Game>> {
     Integer id
+    String name
     List <int> nums
     List <int> randomList
     Double linePrice
