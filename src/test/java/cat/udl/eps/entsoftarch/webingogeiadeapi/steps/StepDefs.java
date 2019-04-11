@@ -72,7 +72,4 @@ public class StepDefs {
     public void theInvitationIsAccepted() {
     }
 
-    @And("^The player has not been added to the game$")
-    public void thePlayerHasNotBeenAddedToTheGame() {
-    }
 }
