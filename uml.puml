@@ -35,8 +35,10 @@ class Invitation <<Invitation>> {
 
 class Game <<Game>> {
     Integer id
-    List <int> appearednumbers
-    Float jackpot
+    List <int> nums
+    List <int> randomList
+    Double linePrice
+    Double bingoPrice
     Player bingowinner
     Player linewinner
 }
