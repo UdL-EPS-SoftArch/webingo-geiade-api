@@ -42,7 +42,6 @@ public class ShowResultsStepdefs {
         JSONObject card = new JSONObject();
         card.put("game", g.getUri());
         card.put("price",3);
-        card.put("nums", c.randomcard());
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/cards")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -77,6 +76,10 @@ public class ShowResultsStepdefs {
         Card c = cardRepository.findByPlayer(p);
         if (c==null){
             System.out.println("buit");
+            System.out.println("game");
+            System.out.println(g);
+            System.out.println("person");
+            System.out.println(p);
         }
         if (c!=null){
             System.out.println("ple");
@@ -98,14 +101,18 @@ public class ShowResultsStepdefs {
     public void hasBeenAddedAtTheBingoWinnerVariableOfTheGame(String email, String game) throws Throwable {
         Game g = gameRepository.findByName(game);
         Player p = (Player) playerRepository.findByEmail(email);
-        assertThat(g.getBingoWinner(), is (p));
+        assertThat(g.getBingoWinner().toString(), is (p.toString()));
     }
 
     @And("^\"([^\"]*)\" has been added at the line winner variable of the game \"([^\"]*)\"$")
     public void hasBeenAddedAtTheLineWinnerVariableOfTheGame(String email, String game) throws Throwable {
         Game g = gameRepository.findByName(game);
         Player p = (Player) playerRepository.findByEmail(email);
-        assertThat(g.getLineWinner(), is (p));
+        System.out.println("Persona");
+        System.out.println(p);
+        System.out.println("P de carta");
+        System.out.println(g.getLineWinner());
+        assertThat(g.getLineWinner().toString(), is (p.toString()));
     }
 
 
@@ -113,8 +120,10 @@ public class ShowResultsStepdefs {
     public void playerSingLine(String email, String game) throws Throwable {
         Game g = gameRepository.findByName(game);
         Player p = (Player) playerRepository.findByEmail(email);
+        System.out.println(p);
         JSONObject joc = new JSONObject();
         joc.put("lineWinner", p.getUri());
+        System.out.println(joc.toString());
         stepDefs.result = stepDefs.mockMvc.perform(
                 patch("/games/{id}", g.getId())
                         .contentType(MediaType.APPLICATION_JSON)
