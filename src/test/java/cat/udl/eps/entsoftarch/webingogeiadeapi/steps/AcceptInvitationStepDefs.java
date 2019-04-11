@@ -44,7 +44,7 @@ public class AcceptInvitationStepDefs {
         this.invitation = new Invitation();
         this.invitation.setId_game(1);
         this.invitation.setPlayer_who_invited(player1);
-        this.invitation.setPlayer_invited(player2);
+        this.invitation.setPlayerInvited(player2);
         this.invitation.setAccepted(false);
         this.invitation.setTimeout(false);
         this.invitation.setUnderway(false);

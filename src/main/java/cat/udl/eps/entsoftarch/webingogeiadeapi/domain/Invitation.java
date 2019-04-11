@@ -17,7 +17,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 public class Invitation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     private int id_game;
     private boolean isUnderway;
     private boolean isAccepted;
@@ -26,7 +26,7 @@ public class Invitation {
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
-    private  Player player_invited;
+    private  Player playerInvited;
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)

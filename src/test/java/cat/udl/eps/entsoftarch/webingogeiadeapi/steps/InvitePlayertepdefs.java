@@ -28,29 +28,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 public class InvitePlayertepdefs {
 
-
     @Autowired
     private StepDefs stepDefs;
-
-    @Autowired
-    private UserRepository playerrepo;
-    //BBDD of existing players
-
 
     private Invitation game_invitation;
 
     //Scenario 1
     @WithMockUser
-    @When("^I invite a new player to the game with email \"([^\"]*)\" and message \"([^\"]*)\"$")
-    public void iInviteANewPlayerToTheGameWithUsernameAndMessage(String message, String email) throws Throwable {
+    @When("^I create an invitation with message \"([^\"]*)\"$")
+    public void iInviteANewPlayerToTheGameWithUsernameAndMessage(String message) throws Throwable {
 
         this.game_invitation = new Invitation();
-        game_invitation.setMessage(message);
-        Player invited = (Player)playerrepo.findByEmail(email);
-        game_invitation.setPlayer_invited(invited);
-        game_invitation.setAccepted(false);
-        game_invitation.setTimeout(false);
-        game_invitation.setUnderway(false);
+        this.game_invitation.setMessage(message);
+        this.game_invitation.setAccepted(false);
+        this.game_invitation.setTimeout(false);
+        this.game_invitation.setUnderway(false);
 
         String invitation = stepDefs.mapper.writeValueAsString(game_invitation);
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -72,7 +64,6 @@ public class InvitePlayertepdefs {
         player_not_found.setUsername(username);
         player_not_found.setPassword("password");
 
-        //playerrepo.findByEmail(email);
     }
 
     @And("^It has not been created any invitation$")
@@ -87,8 +78,8 @@ public class InvitePlayertepdefs {
     }
 
     //Scenario 2
-    @And("^It has been invited to game the player with email \"([^\"]*)\" and message \"([^\"]*)\"$")
-    public void itHasBeenInvitedToGameThePlayerWithEmailAndMessage(String arg0, String arg1) throws Throwable {
+    @And("^It has been invited to game the player")
+    public void itHasBeenInvitedToGameThePlayerWithEmailAndMessage() throws Throwable {
 
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/invitations/")
@@ -98,14 +89,40 @@ public class InvitePlayertepdefs {
                 .andExpect(status().isOk());
     }
 
-    @And("^There is a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
+    @And("^There is a player with username \"([^\"]*)\" and email \"([^\"]*)\" who I invite$")
     public void thereIsAPlayerWithUsernameAndEmail(String username, String email) throws Throwable {
 
-        Player player_invited= new Player();
-        player_invited.setEmail(email);
-        player_invited.setUsername(username);
-        player_invited.setPassword("password");
+        Player player1= new Player();
+        player1.setEmail(email);
+        player1.setUsername(username);
+        player1.setPassword("password");
 
-        playerrepo.save(player_invited);
+        this.game_invitation.setPlayerInvited(player1);
+        this.game_invitation.setId_game(6); //for example
+
+    }
+
+    @And("^I already invited the player with email \"([^\"]*)\" and username \"([^\"]*)\"$")
+    public void iAlreadyInvitedThePlayerWithEmailAndMessage(String email, String username) throws Throwable {
+
+        Player already_invited = new Player();
+        already_invited.setEmail(email);
+        already_invited.setUsername(username);
+        already_invited.setPassword("password");
+
+        Invitation sameinvitation = new Invitation();
+        sameinvitation.setPlayerInvited(already_invited);
+        sameinvitation.setAccepted(false);
+        sameinvitation.setTimeout(false);
+        sameinvitation.setUnderway(false);
+
+        String invitation = stepDefs.mapper.writeValueAsString(sameinvitation);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                post("/invitations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invitation)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 }
