@@ -12,7 +12,7 @@ Feature: Leave Game
 
 
 
-  Scenario: Leave an game as a player but card of another player
+  Scenario: Leave an game as a player but with a card of another player
     Given I login as "player1" with password "password"
     And  Player "user@webingo.org" is in game "game" and playing with card 1
     When I want to leave a game with a card of another player and is not associated with the logged player.
