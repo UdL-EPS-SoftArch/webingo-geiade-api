@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RepositoryEventHandler
-public class GameEvenHandler {
+public class GameEventHandler {
 
     @Autowired
     CardRepository cardRepository;
