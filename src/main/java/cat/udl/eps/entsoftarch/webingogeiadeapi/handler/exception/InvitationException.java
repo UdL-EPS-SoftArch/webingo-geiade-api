@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @ResponseStatus(value= HttpStatus.NOT_ACCEPTABLE)
-public class InvitationCreateException extends RuntimeException{
+public class InvitationException extends RuntimeException{
 
-    public InvitationCreateException(String message){ super(message); }
+    public InvitationException(String message){ super(message); }
 }
