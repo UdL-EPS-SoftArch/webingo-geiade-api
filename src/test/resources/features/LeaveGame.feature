@@ -5,7 +5,7 @@ Feature: Leave Game
 
   Scenario: Leave a game as a player
     Given I login as "player1" with password "password"
-    Given Player "player1@webingo.org" is in game "game" and playing with card 1
+    And Player "player1@webingo.org" is in game "game" and playing with card 1
     When I leave a game when I'm playing with a Card
     Then The response code is 204
     And It has been removed the game in the player with card 1

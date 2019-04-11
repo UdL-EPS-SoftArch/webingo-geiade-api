@@ -47,34 +47,42 @@ public class LeaveGameStepDefs {
         gameRepository.save(this.game1);
 
         this.card1 = new Card();
+        System.out.println("...................");
+
+
         this.card1.setId(id_card);
         this.card1.setPlayer(this.player1);
         this.card1.setGame(this.game1);
-        cardRepository.save(this.card1);
+        //cardRepository.save(this.card1);
 
         /*JSONObject card = new JSONObject();
         card.put("id", id_card);
         card.put("game", this.game1);
-        card.put("player", this.player1);
+        card.put("player", this.player1);*/
+
+        System.out.println(this.card1);
+        System.out.println("------------");
+
+
+        String card = stepDefs.mapper.writeValueAsString(this.card1);
+        System.out.print("AQUI ");
+        System.out.println(card);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/cards")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.card1.toString())
+                        .content(card)
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());*/
+                .andDo(print());
 
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/cards/{id_card}", this.card1.getId())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(authenticate()))
-                .andExpect(status().isOk());
 
 
     }
 
     @When("^I leave a game when I'm playing with a Card")
     public void iLeaveAGameWhenIMPlayingWithCard() throws Throwable{
+
+        System.out.println(this.card1);
 
         stepDefs.result = stepDefs.mockMvc.perform(
                 delete("/cards/{id_card}", this.card1.getId())
@@ -89,6 +97,7 @@ public class LeaveGameStepDefs {
 
     @And("^It has been removed the game in the player with card (\\d+)$")
     public void itHasBeenRemovedTheGameInThePlayerWithCard(int id_card) throws Throwable{
+
 
         stepDefs.result = stepDefs.mockMvc.perform(
                 get("/cards/{id_card}", id_card)
