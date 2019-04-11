@@ -19,7 +19,7 @@ Feature: Join Game
   Scenario: Join an unexisting game as a player
     Given I login as "player1" with password "password"
     When user "player1@webingo.org" join to a game
-    Then The response code is 500
+    Then The response code is 403
 
 
   Scenario: Join a game as a player without money
@@ -27,12 +27,12 @@ Feature: Join Game
     And existing game with name "game"
     And the player "player1@webingo.org" has less money 3
     When user "player1@webingo.org" join to a game
-    Then The response code is 500
+    Then The response code is 403
 
   Scenario: Join a game as a player and this player is already playing in another game
     Given I login as "player1" with password "password"
     And existing game with name "game"
     And the boolean of beingplaying of player "player1@webingo.org" was activated
     When user "player1@webingo.org" join to a game
-    Then The response code is 500
+    Then The response code is 403
 

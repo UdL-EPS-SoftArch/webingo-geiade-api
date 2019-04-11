@@ -1,6 +1,7 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.handler;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.handler.exception.JoinGameException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Card;
@@ -24,7 +25,7 @@ public class CardEvenHandler {
     CardRepository cardRepository;
 
     @HandleAfterCreate
-    public void handleCardPreCreate(Card card) {
+    public void handleCardPreCreate(Card card) throws JoinGameException{
         Player p = (Player)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Player p2 = (Player) playerRepository.findByEmail(p.getEmail());
         int moneyP= p2.getWallet();
@@ -39,10 +40,16 @@ public class CardEvenHandler {
             g.setBingoPrice(moneyB+card.getPrice());
             playerRepository.save(p2);
         }
-        else{
-            card=null;
+
+        else if (card.getGame()==null){
+            throw new JoinGameException("Game does not exists");
         }
-        cardRepository.save(card);
+        else if (p2.isPlaying()==true){
+            throw new JoinGameException("The player was already playing");
+        }
+        else if (moneyP<card.getPrice()){
+            throw new JoinGameException("The player does not have enough money");
+        }
     }
 
 }
