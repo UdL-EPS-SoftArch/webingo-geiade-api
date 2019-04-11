@@ -24,7 +24,6 @@ class Card <<Card>> {
 class Invitation <<Invitation>> {
     Integer id
     Integer id_game
-    Player invited
     Player playerInvited
     Player playerWhoInvited
     Boolean isUnderWay
