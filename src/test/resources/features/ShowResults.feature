@@ -6,6 +6,8 @@ Feature: ShowResults
   Scenario: player sings line and it is accepted
     Given I login as "player1" with password "password"
     And existing game with name "game"
+    And the player "player1@webingo.org" has more wallet than price 3
+    And the boolean of beingplaying was not activated for user "player1@webingo.org"
     And user "player1@webingo.org" join to a game "game"
     And "player1@webingo.org" has won the line for the game "game"
     When player "email" sing line "game"
@@ -15,7 +17,6 @@ Feature: ShowResults
   Scenario: player sings line and it is not accepted
     Given I login as "player1" with password "password"
     And existing game with name "game"
-    And user "player1@webingo.org" join to a game "game"
     And user "player1@webingo.org" join to a game "game"
     When player "email" sing line "game"
     Then The response code is 500

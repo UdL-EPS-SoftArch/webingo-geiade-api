@@ -38,9 +38,11 @@ public class ShowResultsStepdefs {
     @And("^user \"([^\"]*)\" join to a game \"([^\"]*)\"$")
     public void userJoinToAGame(String email, String name) throws Throwable {
         Game g = gameRepository.findByName(name);
+        Card c = new Card();
         JSONObject card = new JSONObject();
         card.put("game", g.getUri());
-        card.put("price",2);
+        card.put("price",3);
+        card.put("nums", c.randomcard());
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/cards")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -73,6 +75,13 @@ public class ShowResultsStepdefs {
         Game g = gameRepository.findByName(game);
         Player p = (Player) playerRepository.findByEmail(email);
         Card c = cardRepository.findByPlayer(p);
+        if (c==null){
+            System.out.println("buit");
+        }
+        if (c!=null){
+            System.out.println("ple");
+        }
+        System.out.println(c.getNums());
         int z=0;
         int [][] nums = c.getNums();
         int [] totalnums = new int[15];
@@ -104,11 +113,12 @@ public class ShowResultsStepdefs {
     public void playerSingLine(String email, String game) throws Throwable {
         Game g = gameRepository.findByName(game);
         Player p = (Player) playerRepository.findByEmail(email);
-        g.setLineWinner(p);
+        JSONObject joc = new JSONObject();
+        joc.put("lineWinner", p.getUri());
         stepDefs.result = stepDefs.mockMvc.perform(
                 patch("/games/{id}", g.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(g.toString())
+                        .content(joc.toString())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
@@ -118,11 +128,12 @@ public class ShowResultsStepdefs {
     public void playerSingBingo(String email, String game) throws Throwable {
         Game g = gameRepository.findByName(game);
         Player p = (Player) playerRepository.findByEmail(email);
-        g.setBingoWinner(p);
+        JSONObject joc = new JSONObject();
+        joc.put("bingoWinner", p.getUri());
         stepDefs.result = stepDefs.mockMvc.perform(
                 patch("/games/{id}", g.getId())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(g.toString())
+                        .content(joc.toString())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
