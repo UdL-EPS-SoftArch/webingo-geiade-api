@@ -25,8 +25,7 @@ public class InvitationEventHandler {
     @HandleBeforeCreate
     public void handleInvitationPreCreate(Invitation invitation) throws InvitationCreateException {
         logger.info("Before creating: {}", invitation.toString());
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Player player = (Player) authentication.getPrincipal();
+        System.out.println("hlslslslsls");
 
         if (invitationRepository.findByPlayerInvited(invitation.getPlayerInvited()).isPresent()) {
             throw new InvitationCreateException("You have already invited this player to this game ");
