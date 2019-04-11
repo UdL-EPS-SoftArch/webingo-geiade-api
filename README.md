@@ -23,15 +23,10 @@
 | Register player               | Register player                 | Start game
 | Invite player                 | Create games                    | Deliver prizes
 | Join game                     | Remove player                   | Show results/winner
-| Accept invitation             |                                 | Create table
-| Leave game                    |                                 | Remove table
-| Withdraw money                |                                 | Manage wallet
+| Accept invitation             |                                 | 
+| Leave game                    |                                 | 
+| Withdraw money                |                                 | 
 | Deposit money                 |                                 | 
-|                               |                                 |
-|                               |                                 |
-|                               |                                 |
-|                               |                                 |
-|                               |                                 |
 
 ## Entities Model
 
