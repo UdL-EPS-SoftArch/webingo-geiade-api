@@ -68,8 +68,4 @@ public class StepDefs {
             result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
     }
 
-    @Then("^The invitation is accepted$")
-    public void theInvitationIsAccepted() {
-    }
-
 }

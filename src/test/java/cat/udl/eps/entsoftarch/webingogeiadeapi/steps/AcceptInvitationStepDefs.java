@@ -39,7 +39,6 @@ public class AcceptInvitationStepDefs {
 
     @And("^Invitation \"([^\"]*)\" is already created and was sent from email \"([^\"]*)\" to email \"([^\"]*)\"$")
     public void invitationIsAlreadyCreatedAndWasSentFromUsernameToUsername(String invitation, String email1, String email2) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
         Player player1 = (Player) userRepository.findByEmail(email1);
         Player player2 = (Player) userRepository.findByEmail(email2);
 
@@ -60,6 +59,13 @@ public class AcceptInvitationStepDefs {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
+    }
+
+    @And("^The game is the desired one$")
+    public void theGameIsTheDesiredOne() {
+        invitationRepository.findById(this.invitation.getId());
+        this.invitation.setAccepted(true);
+        invitationRepository.save(this.invitation);
     }
 
     @When("^I accept the invitation \"([^\"]*)\"$")
@@ -86,17 +92,22 @@ public class AcceptInvitationStepDefs {
 
     @And("^Timeout has been exceeded$")
     public void timeoutHasBeenExceeded() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
         invitationRepository.findById(this.invitation.getId());
         this.invitation.setTimeout(true);
         invitationRepository.save(this.invitation);
+    }
 
+    @And("^The game is not the desired one$")
+    public void theGameIsNotTheDesiredOne() {
+        invitationRepository.findById(this.invitation.getId());
+        this.invitation.setAccepted(false);
+        invitationRepository.save(this.invitation);
     }
 
     @When("^I reject the invitation \"([^\"]*)\"$")
     public void iRejectTheInvitation(String invitation) throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
-
+        invitationRepository.findById(this.invitation.getId());
+        this.invitation.setAccepted(false);
         String invite = stepDefs.mapper.writeValueAsString(this.invitation);
         stepDefs.result = stepDefs.mockMvc.perform(
                 patch("/invitations/{id}", this.invitation.getId())
@@ -105,8 +116,5 @@ public class AcceptInvitationStepDefs {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
-        invitationRepository.findById(this.invitation.getId());
-        this.invitation.setAccepted(false);
-        invitationRepository.save(this.invitation);
     }
 }

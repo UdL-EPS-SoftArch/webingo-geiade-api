@@ -42,7 +42,7 @@ public class InvitationEventHandler {
 
         if (invitation.isUnderway())
             throw new InvitationException("The invitation is already sent or accepted");
-        else if (invitation.isAccepted())
+        else if (!invitation.isAccepted())
             throw new InvitationException("The invitation is already accepted");
         else if (invitation.isTimeout())
             throw new InvitationException("The invitation has reached the timeout for being accepted");
