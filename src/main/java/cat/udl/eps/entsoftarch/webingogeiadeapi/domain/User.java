@@ -96,4 +96,8 @@ public abstract class User extends UriEntity<String> implements UserDetails {
    */
   @Override
   public boolean isEnabled() { return true; }
+
+  public boolean isPasswordEncoded() {
+    return this.password.matches("\\A\\$2a?\\$\\d\\d\\$[./0-9A-Za-z]{53}");
+  }
 }
