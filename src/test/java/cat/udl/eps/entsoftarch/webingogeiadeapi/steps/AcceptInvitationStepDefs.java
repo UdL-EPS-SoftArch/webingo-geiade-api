@@ -38,7 +38,7 @@ public class AcceptInvitationStepDefs {
     private Invitation invitation;
 
     @And("^Invitation \"([^\"]*)\" is already created and was sent from email \"([^\"]*)\" to email \"([^\"]*)\"$")
-    public void invitationIsAlreadyCreatedAndWasSentFromUsernameToUsername(String invitation, String email1, String email2) throws Throwable {
+    public void invitationIsAlreadyCreatedAndWasSentFromEmailToEmail(String invitation, String email1, String email2) throws Throwable {
         Player player1 = (Player) userRepository.findByEmail(email1);
         Player player2 = (Player) userRepository.findByEmail(email2);
 

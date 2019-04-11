@@ -46,14 +46,11 @@ public class InvitationEventHandler {
             throw new InvitationException("The invitation is already accepted");
         else if (invitation.isTimeout())
             throw new InvitationException("The invitation has reached the timeout for being accepted");
-
-        invitationRepository.save(invitation);
     }
 
     @HandleBeforeSave
     public void handleInvitationPostSave(Invitation invitation) throws InvitationException{
         logger.info("After updating: {}", invitation.toString());
-        // invitationRepository.save(invitation);
         if (invitation.isTimeout())
             throw new InvitationException("The invitation has reached the timeout");
         else if (invitation.isUnderway())
