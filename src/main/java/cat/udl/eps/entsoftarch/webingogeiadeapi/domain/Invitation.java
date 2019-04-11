@@ -26,7 +26,7 @@ public class Invitation {
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
-    private  Player player_invited;
+    private  Player playerInvited;
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)

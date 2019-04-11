@@ -28,7 +28,7 @@ public class InvitationEventHandler {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Player player = (Player) authentication.getPrincipal();
 
-        if (invitationRepository.count() > 0) {
+        if (invitationRepository.findByPlayerInvited(invitation.getPlayerInvited()).isPresent()) {
             throw new InvitationCreateException("You have already invited this player to this game ");
         }
 

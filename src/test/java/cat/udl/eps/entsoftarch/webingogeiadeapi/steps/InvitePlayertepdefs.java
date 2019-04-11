@@ -97,7 +97,7 @@ public class InvitePlayertepdefs {
         player1.setUsername(username);
         player1.setPassword("password");
 
-        this.game_invitation.setPlayer_invited(player1);
+        this.game_invitation.setPlayerInvited(player1);
         this.game_invitation.setId_game(6); //for example
 
     }
@@ -111,12 +111,12 @@ public class InvitePlayertepdefs {
         already_invited.setPassword("password");
 
         Invitation sameinvitation = new Invitation();
-        sameinvitation.setPlayer_invited(already_invited);
+        sameinvitation.setPlayerInvited(already_invited);
         sameinvitation.setAccepted(false);
         sameinvitation.setTimeout(false);
         sameinvitation.setUnderway(false);
 
-        String invitation = stepDefs.mapper.writeValueAsString(game_invitation);
+        String invitation = stepDefs.mapper.writeValueAsString(sameinvitation);
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/invitations")
                         .contentType(MediaType.APPLICATION_JSON)
