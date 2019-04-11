@@ -17,13 +17,16 @@ class Card <<Card>> {
     Integer id
     List <int> [rows][columns]
     Integer price
+    Game game
+    Player player
 }
 
 class Invitation <<Invitation>> {
     Integer id
     Integer id_game
-    Player from
-    Player to
+    Player invited
+    Player playerInvited
+    Player playerWhoInvited
     Boolean isUnderWay
     Boolean isAccepted
     Boolean timeout
@@ -37,7 +40,7 @@ class Game <<Game>> {
     Player bingowinner
     Player linewinner
 }
-Card "has many" -left- "isplayed 1" Game
+Card "has many" --> "isplayed 1" Game
 
 class User <<User>> {
     String username
@@ -48,12 +51,11 @@ class User <<User>> {
 }
 
 class Player <<User>> extends User {
-    Float wallet
-    Game isPlaying_game
-    Card isPlaying_card
+    Integer wallet
+    Boolean isPlaying
+
 }
-Card "playedBy 1" -- "plays 1" Player
-Game "plays in 1" -up- "has many" Player
+Card "playedBy 1" --> "plays 1" Player
 Invitation "many" <-- "1" Player : invites
 Invitation "1" <-- "1" Player : receives
 Invitation "many" --> "1" Game : belongs
