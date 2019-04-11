@@ -35,9 +35,10 @@ public class InvitationEventHandler {
     @HandleAfterCreate
     public void handleInvitationPostCreate(Invitation invitation) throws InvitationException{
         logger.info("After creating: {}", invitation.toString());
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Player player_playing = (Player) authentication.getPrincipal();
-        invitation.setPlayer_who_invited(player_playing);
+        invitation.setPlayerWhoInvited(player_playing);
 
         if (invitation.isUnderway())
             throw new InvitationException("The invitation is already sent or accepted");

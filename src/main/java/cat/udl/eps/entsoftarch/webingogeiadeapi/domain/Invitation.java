@@ -30,5 +30,5 @@ public class Invitation {
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
-    private Player player_who_invited;
+    private Player playerWhoInvited;
 }

@@ -33,6 +33,12 @@ public class InvitePlayertepdefs {
 
     private Invitation game_invitation;
 
+    @Autowired
+    private InvitationRepository invitationRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
+
     //Scenario 1
     @WithMockUser
     @When("^I create an invitation with message \"([^\"]*)\"$")
@@ -63,6 +69,7 @@ public class InvitePlayertepdefs {
         player_not_found.setEmail(email_error);
         player_not_found.setUsername(username);
         player_not_found.setPassword("password");
+        playerRepository.save(player_not_found);
 
     }
 
@@ -96,25 +103,30 @@ public class InvitePlayertepdefs {
         player1.setEmail(email);
         player1.setUsername(username);
         player1.setPassword("password");
+        playerRepository.save(player1);
 
         this.game_invitation.setPlayerInvited(player1);
         this.game_invitation.setId_game(6); //for example
+        invitationRepository.save(this.game_invitation);
 
     }
 
     @And("^I already invited the player with email \"([^\"]*)\" and username \"([^\"]*)\"$")
     public void iAlreadyInvitedThePlayerWithEmailAndMessage(String email, String username) throws Throwable {
 
+        Invitation sameinvitation = new Invitation();
+        sameinvitation.setAccepted(false);
+        sameinvitation.setTimeout(false);
+        sameinvitation.setUnderway(false);
+
+
         Player already_invited = new Player();
         already_invited.setEmail(email);
         already_invited.setUsername(username);
         already_invited.setPassword("password");
+        playerRepository.save(already_invited);
 
-        Invitation sameinvitation = new Invitation();
         sameinvitation.setPlayerInvited(already_invited);
-        sameinvitation.setAccepted(false);
-        sameinvitation.setTimeout(false);
-        sameinvitation.setUnderway(false);
 
         String invitation = stepDefs.mapper.writeValueAsString(sameinvitation);
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -124,5 +136,7 @@ public class InvitePlayertepdefs {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
+
+        invitationRepository.save(sameinvitation);
     }
 }
