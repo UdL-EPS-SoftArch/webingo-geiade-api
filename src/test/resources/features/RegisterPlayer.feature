@@ -42,3 +42,8 @@ Feature: Register Player
     Then The response code is 400
     And The error message is "length must be between 8 and 256"
     And It has not been created a player with username "player"
+
+  Scenario: Change Player value and still can access player
+    Given I login as "player1" with password "password"
+    When I change "player1@webingo.org" isPlaying to true
+    Then "player1@webingo.org" isPlaying value is set to true
