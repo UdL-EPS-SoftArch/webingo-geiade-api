@@ -1,15 +1,10 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 
-import java.util.Collection;
-import java.util.List;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 
 @Entity
 @Data
