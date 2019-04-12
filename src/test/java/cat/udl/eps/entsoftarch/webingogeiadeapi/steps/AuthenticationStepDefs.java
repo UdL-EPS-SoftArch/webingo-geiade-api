@@ -3,6 +3,7 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.steps;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
@@ -35,4 +36,9 @@ public class AuthenticationStepDefs {
     }
 
 
+    @Given("^I login with password \"([^\"]*)\" and a username \"([^\"]*)\"$")
+    public void iLoginWithPasswordAndAUsername(String username, String password) throws Throwable {
+        AuthenticationStepDefs.currentUsername = username;
+        AuthenticationStepDefs.currentPassword = password;
+    }
 }
