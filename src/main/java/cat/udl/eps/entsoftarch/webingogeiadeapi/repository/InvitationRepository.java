@@ -13,5 +13,5 @@ import java.util.List;
 
 @RepositoryRestResource
 
-public interface InvitationRepository extends PagingAndSortingRepository<Invitation, Long> {
+public interface InvitationRepository extends PagingAndSortingRepository<Invitation, Integer> {
 }
