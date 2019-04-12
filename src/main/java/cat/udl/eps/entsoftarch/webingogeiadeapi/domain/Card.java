@@ -2,7 +2,9 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import javax.persistence.*;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,8 +16,9 @@ import org.springframework.security.core.authority.AuthorityUtils;
 @EqualsAndHashCode(callSuper = false)
 public class Card {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int [][] nums;
+    private int [][] nums = new int [3][5];
     private int price;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -25,4 +28,37 @@ public class Card {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private Player player;
+
+    public int[][] randomcard(){
+        Random rand = new Random();
+        int [][] numeros = new int [3][5];
+        for (int i=0; i<3; i++){
+            for (int j=0; j<5; j++){
+                numeros[i][j]= 0;
+            }
+        }
+        int temp;
+        for (int i=0; i<3; i++){
+            for (int j=0; j<5; j++){
+                temp = rand.nextInt(100);
+                while (isAlreadyAdded(numeros,temp)==true){
+                    temp = rand.nextInt(100);
+                }
+                numeros[i][j]= temp;
+            }
+        }
+       return numeros;
+    }
+
+    private boolean isAlreadyAdded(int [][]nums, int x){
+        for (int i=0; i<3; i++){
+            for (int j=0; j<5; j++){
+                if (x == nums[i][j]){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
+
