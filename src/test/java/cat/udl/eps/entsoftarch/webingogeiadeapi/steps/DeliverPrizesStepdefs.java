@@ -84,4 +84,21 @@ public class DeliverPrizesStepdefs {
         //assertEquals(0, lwinner.getWallet().compareTo(oldwalletline+game.getLinePrize()));
         //assertEquals(0, bwinner.getWallet().compareTo(oldwalletbingo+game.getBingoPrize()));
     }
+
+    @And("^The player \"([^\"]*)\" won the line and bingo at the same game$")
+    public void thePlayerWonTheLineAndBingoAtTheSameGame(String winner_email) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        Player winner = (Player) playerRepository.findByEmail(winner_email);
+        this.game.setBingoWinner(winner);
+        this.game.setLineWinner(winner);
+        this.game.setNumberofplayers(10);
+        this.game.setPrice(5);
+        this.game.setLinePrize(game.getNumberofplayers()*this.game.getPrice()*0.25);
+        this.game.setBingoPrize((game.getPrice()*numberofplayers) - (game.getLinePrize()));
+        playerRepository.save(winner);
+        gameRepository.save(this.game);
+
+        assertEquals(this.game.getLineWinner(), winner);
+        assertEquals(this.game.getBingoWinner(), winner);
+    }
 }
