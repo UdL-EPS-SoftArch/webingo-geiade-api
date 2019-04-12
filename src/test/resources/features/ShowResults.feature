@@ -14,7 +14,7 @@ Feature: ShowResults
     Then The response code is 200
     And "player1@webingo.org" has been added at the line winner variable of the game "game"
 
-  Scenario: player sings line and it is not accepted
+  Scenario: player sings line but it is not accepted
     Given I login as "player1" with password "password"
     And existing game with name "game"
     And the player "player1@webingo.org" has more wallet than price 3
@@ -38,6 +38,7 @@ Feature: ShowResults
   Scenario: player sings bingo and it is not accepted
     Given I login as "player1" with password "password"
     And existing game with name "game"
+    And the player "player1@webingo.org" has more wallet than price 3
     And user "player1@webingo.org" join to a game "game"
     When player "player1@webingo.org" sing bingo "game"
     Then The response code is 403

@@ -139,6 +139,5 @@ public class JoinGameStepdefs {
             this.card_id = c.getId();
         }
 
-
     }
 }
