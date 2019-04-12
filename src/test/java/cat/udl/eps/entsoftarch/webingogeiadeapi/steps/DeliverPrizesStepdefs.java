@@ -6,10 +6,13 @@ import cucumber.api.PendingException;
 import cucumber.api.java.en.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.junit.Assert.*;
 import org.json.JSONObject;
+import static org.hamcrest.Matchers.*;
 
 
 public class DeliverPrizesStepdefs {
@@ -43,8 +46,22 @@ public class DeliverPrizesStepdefs {
     @And("^There is a line prize and a bingo prize in the current game$")
     public void thereIsALinePrizeAndABingoPrizeInTheCurrentGame() throws Exception {
 
-        //assertThat(this.game.getBingoPrize(), greaterThan (0.0));
-        //assertThat(this.game.getLinePrize(), greaterThan (0.0));
+        JSONObject game0bject = new JSONObject();
+        game0bject.put("linePrize", this.game.getLinePrize());
+        game0bject.put("bingoPrize", this.game.getBingoPrize());
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/games")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(game0bject.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
+        System.out.println(this.game);
+
+        assertThat(this.game.getBingoPrize(), greaterThan (0.0));
+        assertThat(this.game.getLinePrize(), greaterThan (0.0));
     }
 
     @And("^The player \"([^\"]*)\" won the line and the player \"([^\"]*)\" won the bingo$")
@@ -63,8 +80,9 @@ public class DeliverPrizesStepdefs {
         assertEquals(this.game.getBingoWinner(), bwinner);
 
         JSONObject game0bject = new JSONObject();
-        game0bject.put("lineWinner", lwinner);
-        game0bject.put("bingoWinner", bwinner);
+        game0bject.put("name", "name");
+        game0bject.put("lineWinner", lwinner.getUri());
+        game0bject.put("bingoWinner", bwinner.getUri());
 
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/games")

@@ -33,8 +33,9 @@ public class GameEventHandler {
     @Autowired
     PlayerRepository playerRepository;
 
-    private int gameprice = 5;
-    private int numberofplayers = 10;
+    private int gamePrice = 5;
+    private int numberOfPlayers = 10;
+    private double lineRatio = 0.25;
 
     @HandleBeforeCreate
     public void handleGamerPreCreate(Game game) {
@@ -59,8 +60,10 @@ public class GameEventHandler {
     @HandleAfterCreate
     public void handleGamePostCreate(Game game){
         System.out.println("entra after create");
-        game.setNumberofplayers(numberofplayers);
-        game.setPrice(gameprice);
+        game.setNumberofplayers(numberOfPlayers);
+        game.setPrice(gamePrice);
+        game.setLinePrize(game.getNumberofplayers()*game.getPrice()*lineRatio);
+        game.setBingoPrize((game.getPrice()*game.getNumberofplayers()) - (game.getLinePrize()));
         gameRepository.save(game);
     }
 
@@ -77,7 +80,7 @@ public class GameEventHandler {
     @HandleAfterSave
     public void handleGamePostSave(Game game) throws ShowResultException{
 
-        game.setLinePrize(game.getNumberofplayers()*game.getPrice()*0.25);
+        game.setLinePrize(game.getNumberofplayers()*game.getPrice()*lineRatio);
         game.setBingoPrize((game.getPrice()*game.getNumberofplayers()) - (game.getLinePrize()));
 
         if (game.getBingoWinner()!=null){
