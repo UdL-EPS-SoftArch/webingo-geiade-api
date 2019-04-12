@@ -89,7 +89,7 @@ public class InvitePlayertepdefs {
     public void itHasBeenInvitedToGameThePlayerWithEmailAndMessage() throws Throwable {
 
         stepDefs.result = stepDefs.mockMvc.perform(
-                get("/invitations/")
+                get("/invitations/{id}", this.game_invitation.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print())
