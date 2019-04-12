@@ -64,13 +64,6 @@ public class DeliverPrizesStepdefs {
         assertEquals(this.game.getLineWinner(), lwinner);
         assertEquals(this.game.getBingoWinner(), bwinner);
 
-        stepDefs.result = stepDefs.mockMvc.perform(
-                post("/games/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.game.toString())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
     }
 
 
@@ -83,8 +76,8 @@ public class DeliverPrizesStepdefs {
         playerRepository.save(lwinner);
         playerRepository.save(bwinner);
 
-        //assertEquals(0, lwinner.getWallet().compareTo(oldwalletline+game.getLinePrize()));
-        //assertEquals(0, bwinner.getWallet().compareTo(oldwalletbingo+game.getBingoPrize()));
+        //assertEquals(0, lwinner.getWallet().compareTo(oldwalletline+this.game.getLinePrize()));
+        //assertEquals(0, bwinner.getWallet().compareTo(oldwalletbingo+this.game.getBingoPrize()));
     }
 
     @Given("^The player \"([^\"]*)\" won the line and bingo at the same game$")
@@ -117,5 +110,18 @@ public class DeliverPrizesStepdefs {
 
     @Then("^The game is completely finished$")
     public void theGameIsCompletelyFinished() {
+        this.game.setPrice(0);
+        this.game.setNumberofplayers(0);
+        this.game.setLineWinner(null);
+        this.game.setBingoWinner(null);
+    }
+
+    @When("^I deliver prizes to the only winner$")
+    public void iDeliverPrizesToTheOnlyWinner() {
+        double oldwallet = bwinner.getWallet();
+        lwinner.setWallet(oldwallet + this.game.getLinePrize() + this.game.getBingoPrize());
+        playerRepository.save(bwinner);
+
+        //assertEquals(0, bwinner.getWallet().compareTo(oldwallet+this.game.getLinePrize()+this.game.getBingoPrize()));
     }
 }
