@@ -1,9 +1,11 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.UniqueElements;
@@ -17,11 +19,13 @@ public class Game extends UriEntity<Integer>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @Column(unique = true)
     private String name;
+
     private int [] nums;
     private boolean isFinished;
-    // private List<Card> cardsInGame, players;
+
     private double linePrize, bingoPrize;
     private Player lineWinner, bingoWinner;
 
