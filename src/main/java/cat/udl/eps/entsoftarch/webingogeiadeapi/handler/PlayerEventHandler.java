@@ -67,7 +67,6 @@ public class PlayerEventHandler {
             System.out.println(player.toString());        }
 
         // playerRepository.save(player);
-
     }
 
 
