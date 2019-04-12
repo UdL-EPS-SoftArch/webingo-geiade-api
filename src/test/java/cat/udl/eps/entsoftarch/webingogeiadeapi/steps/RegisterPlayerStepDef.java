@@ -87,14 +87,15 @@ public class RegisterPlayerStepDef {
     }
 
   @Then("^\"([^\"]*)\" isPlaying value is set to true$")
-  public void isplayingValueIsSetToTrue(String email) throws Throwable{
+  public void isplayingValueIsSetToTrue(String email) throws Throwable {
     Player logPlayer = (Player) playerRepository.findByEmail(email);
     stepDefs.result = stepDefs.mockMvc.perform(
             get("/players/{username}", logPlayer.getUsername())
                     .accept(MediaType.APPLICATION_JSON)
                     .with(AuthenticationStepDefs.authenticate()))
             .andDo(print())
-            .andExpect(jsonPath("$.playing",is(true)));
+            .andExpect(jsonPath("$.playing", is(true)));
+  }
 
   @When("^I change \"([^\"]*)\" password to \"([^\"]*)\"$")
   public void iChangePasswordTo(String mail, String password) throws Throwable {
