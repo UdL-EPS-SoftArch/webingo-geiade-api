@@ -50,27 +50,6 @@ public class LeaveGameStepDefs {
         this.card1.setPlayer(this.player1);
         this.card1.setGame(this.game1);
         cardRepository.save(this.card1);
-
-
-        //Intentat fer els "save" amb un Handler pero hi han hagut problemes en la creacio del Handler ja que la creacio
-        //de la carta era buida, quan hauria de sortir plena ja que s'havien actualitzat els seus paramentres previament.
-
-        /*JSONObject card = new JSONObject();
-        card.put("id", id_card);
-        card.put("game", this.game1);
-        card.put("player", this.player1);
-
-        String postcard = stepDefs.mapper.writeValueAsString(card);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                post("/cards")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(postcard)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());*/
-
-
-
     }
 
     @When("^I leave a game when I'm playing with a Card")
