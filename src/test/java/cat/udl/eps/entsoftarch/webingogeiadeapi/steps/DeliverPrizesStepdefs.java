@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.junit.Assert.*;
+import org.json.JSONObject;
 
 
 public class DeliverPrizesStepdefs {
@@ -61,10 +62,14 @@ public class DeliverPrizesStepdefs {
         assertEquals(this.game.getLineWinner(), lwinner);
         assertEquals(this.game.getBingoWinner(), bwinner);
 
+        JSONObject game0bject = new JSONObject();
+        game0bject.put("lineWinner", lwinner);
+        game0bject.put("bingoWinner", bwinner);
+
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/games")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.game.toString())
+                        .content(game0bject.toString())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
