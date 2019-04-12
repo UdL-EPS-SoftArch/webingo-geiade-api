@@ -2,74 +2,58 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.steps;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.*;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.GameRepository;
-import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import cucumber.api.PendingException;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
 import cucumber.api.java.en.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-
-import javax.persistence.ManyToOne;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.*;
+
 
 public class DeliverPrizesStepdefs {
 
     @Autowired
     private StepDefs stepDefs;
 
-    @ManyToOne
-    @JsonIdentityReference(alwaysAsId = true)
+    @Autowired
+    private GameRepository gameRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
+
+
     private Game game;
 
-    @ManyToOne
-    @JsonIdentityReference(alwaysAsId = true)
-    private Player lwinner;
 
-    @ManyToOne
-    @JsonIdentityReference(alwaysAsId = true)
-    private Player bwinner;
-
-    @Given("^There is a game with named \"([^\"]*)\" that has finished$")
+    @Given("^There is a game with named \"([^\"]*)\" that has already finished$")
     public void thereIsAGameWithNameThatFinished(String game_name) throws Throwable {
 
         this.game = new Game();
-        game.setName(game_name);
-        game.setFinished(true);
+        this.game.setName(game_name);
+        this.game.setFinished(true);
+        gameRepository.save(this.game);
+
+        assertTrue(this.game.isFinished());
+
     }
 
     @Given("^There is a player with email \"([^\"]*)\" and username \"([^\"]*)\" who won the line$")
     public void thereIsAPlayerWithEmailAndUsernameWhoWonTheLine(String linewinner_email, String lineowinner_username) throws Throwable {
 
-        this.lwinner = new Player();
-        this.game = new Game();
+        Player lwinner = playerRepository.findByEmail(linewinner_email);
+        System.out.println(lwinner);
 
-        this.lwinner.setUsername(lineowinner_username);
-        this.lwinner.setPassword("password");
-        this.lwinner.setEmail(linewinner_email);
-        this.game.setName("Game 1");
-        this.game.setLineWinner(lwinner);
+        //this.game.setLineWinner(this.lwinner);
 
-        this.game.getLineWinner().getEmail().compareTo(lineowinner_username);
+        //assertEquals(this.game.getLineWinner().getEmail(), this.lwinner.getEmail());
 
     }
 
     @Given("^There is a player with email \"([^\"]*)\" and username \"([^\"]*)\" who won the bingo game$")
     public void thereIsAPlayerWithEmailAndUsernameWhoWonTheBingoGame(String bingowinner_email, String bingowinner_username) throws Throwable {
 
-        this.bwinner = new Player();
-        this.game = new Game();
-
-        this.bwinner.setUsername(bingowinner_username);
-        this.bwinner.setPassword("password");
-        this.bwinner.setEmail(bingowinner_email);
-        this.game.setName("Game 1");
-        this.game.setBingoWinner(bwinner);
-
-        this.game.getBingoWinner().getEmail().compareTo(bingowinner_username);
 
     }
 

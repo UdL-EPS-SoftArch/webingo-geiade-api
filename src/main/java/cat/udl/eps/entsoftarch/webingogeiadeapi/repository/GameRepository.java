@@ -17,4 +17,5 @@ public interface GameRepository extends PagingAndSortingRepository<Game, Integer
    * @return a game.
    */
   Game findById(int id);
+  Game findByName(String name);
 }
