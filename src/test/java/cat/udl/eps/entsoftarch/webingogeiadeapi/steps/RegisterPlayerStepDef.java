@@ -18,13 +18,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class RegisterPlayerStepDef {
 
   private static final Logger logger = LoggerFactory.getLogger(RegisterPlayerStepDef.class);
 
+  public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
   @Autowired
   private StepDefs stepDefs;
+
+  private Player player;
 
   @Autowired
   private UserRepository playerRepository;
@@ -89,5 +95,22 @@ public class RegisterPlayerStepDef {
                     .with(AuthenticationStepDefs.authenticate()))
             .andDo(print())
             .andExpect(jsonPath("$.playing",is(true)));
+
+  @When("^I change \"([^\"]*)\" password to \"([^\"]*)\"$")
+  public void iChangePasswordTo(String mail, String password) throws Throwable {
+    this.player = (Player) playerRepository.findByEmail(mail);
+
+    System.out.println(this.player.toString());
+
+    JSONObject playerObject = new JSONObject();
+    playerObject.put("password", password);
+
+    stepDefs.result = stepDefs.mockMvc.perform(
+            patch("/players/{username}", this.player.getUsername())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(playerObject.toString())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .with(AuthenticationStepDefs.authenticate()))
+            .andDo(print());
   }
 }

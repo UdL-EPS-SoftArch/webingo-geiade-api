@@ -47,3 +47,11 @@ Feature: Register Player
     Given I login as "player1" with password "password"
     When I change "player1@webingo.org" isPlaying to true
     Then "player1@webingo.org" isPlaying value is set to true
+
+  Scenario: Change the password of an existing player
+    Given I login as "player1" with password "password"
+    When I change "player1@webingo.org" password to "password2"
+    Then The response code is 200
+    And I login as "player1" with password "password2"
+    And It has been created a player with username "player1" and email "player1@webingo.org", the password is not returned
+
