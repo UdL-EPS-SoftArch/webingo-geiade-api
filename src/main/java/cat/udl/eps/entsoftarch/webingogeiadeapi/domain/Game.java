@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.UniqueElements;
@@ -24,6 +25,9 @@ public class Game extends UriEntity<Integer>{
     private int [] nums;
     // private List<Card> cardsInGame, players;
     private double linePrice, bingoPrice;
+
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
     private Player lineWinner, bingoWinner;
     private int price;
 

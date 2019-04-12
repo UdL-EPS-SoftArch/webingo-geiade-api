@@ -17,6 +17,7 @@ Feature: ShowResults
   Scenario: player sings line and it is not accepted
     Given I login as "player1" with password "password"
     And existing game with name "game"
+    And the player "player1@webingo.org" has more wallet than price 3
     And user "player1@webingo.org" join to a game "game"
     When player "player1@webingo.org" sing line "game"
     Then The response code is 403

@@ -24,24 +24,19 @@ public class GameEventHandler {
     @Autowired
     GameRepository gameRepository;
 
-    public int contL=0;
-    public int contB=0;
+
     @HandleAfterSave
     public void handleGamePreSave(Game game) throws ShowResultException{
-        System.out.println("Dins handler!!!!!!!!!!!!!");
-        System.out.println(game);
+
         if (game.getBingoWinner()!=null){
             Boolean real = true;
             Player p = game.getBingoWinner();
-            System.out.println("game");
-            System.out.println(game);
             Card c = cardRepository.findByPlayer(p);
+            if (c==null){
+                throw new ShowResultException("The player does not have any card!");
+            }
             int [] gamesN = game.getNums();
-            System.out.println("persona");
-            System.out.println(p);
-            System.out.println("carta");
-            System.out.println(c);
-            System.out.println("FORA HANDLER");
+
             if (gamesN == null){
                 throw new ShowResultException("The game does not have any number yet! It is not posible to sing Bingo");
             }
@@ -55,18 +50,22 @@ public class GameEventHandler {
             if (real == false){
                 throw new ShowResultException("The player does not have all the bingo numbers!!");
             }
-            gameRepository.save(game);
         }
 
         else if(game.getLineWinner()!=null){
             Boolean real = false;
-            Player p = game.getBingoWinner();
+            Player p = game.getLineWinner();
             Card c = cardRepository.findByPlayer(p);
+            if (c==null){
+                throw new ShowResultException("The player does not have any card!");
+            }
             int [] gamesN = game.getNums();
-            int [][] playerN = c.getNums();
+
             if (gamesN == null){
                 throw new ShowResultException("The game does not have any number yet! It is not posible to sing line");
             }
+            int [][] playerN = c.getNums();
+
             for (int i=0; i<3; i++) {
                 if (numerosDeLaLineaEstanDits(playerN[i],gamesN)==true){
                     real = true;
@@ -75,8 +74,7 @@ public class GameEventHandler {
             if (real == false){
                 throw new ShowResultException("The player does not have all the line numbers!!");
             }
-
-
+            
         }
         gameRepository.save(game);
     }
