@@ -3,8 +3,8 @@ Feature: Deliver Prizes
 
   Scenario: The system delivers prizes to two winners done correctly
     Given There is a game with named "geiade-game" that has already finished
-    And There is a player with email "player1@webingo.cat" and username "player1" who won the line
-    And There is a player with email "player2@webingo.cat" and username "player2" who won the bingo game
+    And The player "player1@webingo.cat" won the line
+    And The player "player2@webingo.cat" won the bingo
     And There is a line prize and a bingo prize in the current game
     When I deliver prizes to the players with email "player1@webingo.cat" and "player2@webingo.cat"
     Then The response code is 201

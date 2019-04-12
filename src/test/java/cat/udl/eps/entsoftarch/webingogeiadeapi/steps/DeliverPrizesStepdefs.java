@@ -1,8 +1,8 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.steps;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.*;
-import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.GameRepository;
-import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.*;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,10 +21,11 @@ public class DeliverPrizesStepdefs {
     private GameRepository gameRepository;
 
     @Autowired
-    private PlayerRepository playerRepository;
+    UserRepository playerRepository;
 
 
     private Game game;
+    private Player lwinner, bwinner;
 
 
     @Given("^There is a game with named \"([^\"]*)\" that has already finished$")
@@ -39,22 +40,27 @@ public class DeliverPrizesStepdefs {
 
     }
 
-    @Given("^There is a player with email \"([^\"]*)\" and username \"([^\"]*)\" who won the line$")
-    public void thereIsAPlayerWithEmailAndUsernameWhoWonTheLine(String linewinner_email, String lineowinner_username) throws Throwable {
+    @Given("^The player \"([^\"]*)\" won the line$")
+    public void thereIsAPlayerWithEmailAndUsernameWhoWonTheLine(String linewinner_email) throws Throwable {
 
-        Player lwinner = playerRepository.findByEmail(linewinner_email);
-        System.out.println(lwinner);
+        lwinner = (Player) playerRepository.findByEmail(linewinner_email);
+        lwinner.setUsername("username");
+        this.game.setLineWinner(lwinner);
+        //playerRepository.save(lwinner);
 
-        //this.game.setLineWinner(this.lwinner);
-
-        //assertEquals(this.game.getLineWinner().getEmail(), this.lwinner.getEmail());
+        //assertEquals(this.game.getLineWinner(), lwinner);
 
     }
 
-    @Given("^There is a player with email \"([^\"]*)\" and username \"([^\"]*)\" who won the bingo game$")
-    public void thereIsAPlayerWithEmailAndUsernameWhoWonTheBingoGame(String bingowinner_email, String bingowinner_username) throws Throwable {
+    @And("^The player \"([^\"]*)\" won the bingo$")
+    public void thePlayerWonTheBingo(String bingowinner_email) throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        bwinner = (Player) playerRepository.findByEmail(bingowinner_email);
+        bwinner.setUsername("username");
+        this.game.setBingoWinner(bwinner);
+        //playerRepository.save(bwinner);
 
-
+        //assertEquals(this.game.getBingoWinner(), bwinner);
     }
 
     @Given("^There is a line prize and a bingo prize in the current game$")
@@ -81,16 +87,6 @@ public class DeliverPrizesStepdefs {
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
-
-    }
-
-    @And("^I delete the bingo and line prizes$")
-    public void iDeleteTheBingoAndLinePrizes() {
-    }
-
-    @And("^I deliver prizes to the players with email \"([^\"]*)\" and \"([^\"]*)\"$")
-    public void iDeliverPrizesToThePlayersWithEmailAnd(String arg0, String arg1) throws Throwable {
-
 
     }
 
