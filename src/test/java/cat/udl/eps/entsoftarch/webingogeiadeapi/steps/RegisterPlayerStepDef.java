@@ -1,12 +1,13 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.steps;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.When;
@@ -15,13 +16,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class RegisterPlayerStepDef {
 
   private static final Logger logger = LoggerFactory.getLogger(RegisterPlayerStepDef.class);
 
+  public static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
   @Autowired
   private StepDefs stepDefs;
+
+  private Player player;
+
+  @Autowired
+  private UserRepository playerRepository;
 
   @When("^I register a new player with username \"([^\"]*)\", email \"([^\"]*)\" and password \"([^\"]*)\"$")
   public void iRegisterANewPlayer(String username, String email, String password) throws Throwable {
@@ -60,4 +70,21 @@ public class RegisterPlayerStepDef {
         .andExpect(status().isNotFound());
   }
 
+  @When("^I change \"([^\"]*)\" password to \"([^\"]*)\"$")
+  public void iChangePasswordTo(String mail, String password) throws Throwable {
+    this.player = (Player) playerRepository.findByEmail(mail);
+
+    System.out.println(this.player.toString());
+
+    JSONObject playerObject = new JSONObject();
+    playerObject.put("password", password);
+
+    stepDefs.result = stepDefs.mockMvc.perform(
+            patch("/players/{username}", this.player.getUsername())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(playerObject.toString())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .with(AuthenticationStepDefs.authenticate()))
+            .andDo(print());
+  }
 }

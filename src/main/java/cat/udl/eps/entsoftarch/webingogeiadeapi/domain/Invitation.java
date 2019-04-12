@@ -3,7 +3,6 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;

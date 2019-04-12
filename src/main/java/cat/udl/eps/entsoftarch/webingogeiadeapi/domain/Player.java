@@ -2,8 +2,7 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 
 import java.util.Collection;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,8 @@ import org.springframework.security.core.authority.AuthorityUtils;
 @EqualsAndHashCode(callSuper = true)
 public class Player extends User {
 	private int wallet;
+	private int toWallet;
 	private boolean isPlaying;
-	// private List<Game> hasPlayed;
 
 	@Override
 	@Transient
