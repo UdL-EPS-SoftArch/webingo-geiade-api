@@ -12,12 +12,10 @@ import java.util.List;
 public interface GameRepository extends PagingAndSortingRepository<Game, Integer> {
 
   /**
-   * Find the list of admin users.
-   * @param text String that refers to the name of the admin user.
-   * @return a list of the admin users.
+   * Find the game by id.
+   * @param id int that refers to the id of the game.
+   * @return a game.
    */
-  //List<Game> findByNameContaining(@Param("text") String text);
   Game findById(int id);
-
   Game findByName(String name);
 }

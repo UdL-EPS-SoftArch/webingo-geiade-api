@@ -11,6 +11,8 @@ import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Card;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.AdminRepository;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.CardRepository;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -39,7 +41,7 @@ public class CardEvenHandler {
             double moneyB = g.getBingoPrice();
             g.setBingoPrice(moneyB+card.getPrice());
             playerRepository.save(p2);
-            cardRepository.save(card);
+            //cardRepository.save(card);
         }
 
         else if (card.getGame()==null){

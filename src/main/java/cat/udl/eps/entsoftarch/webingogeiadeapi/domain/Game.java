@@ -1,5 +1,6 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.*;
@@ -24,6 +25,11 @@ public class Game extends UriEntity<Integer>{
 
     private int [] nums;
     // private List<Card> cardsInGame, players;
+
+    /*@OneToMany (mappedBy = "username", fetch = FetchType.EAGER)
+    @JsonIdentityReference(alwaysAsId = true)
+    private List<User> players = new ArrayList<>();*/
+
     private double linePrice, bingoPrice;
 
     @ManyToOne

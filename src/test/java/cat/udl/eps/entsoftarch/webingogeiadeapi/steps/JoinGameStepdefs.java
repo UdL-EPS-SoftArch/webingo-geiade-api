@@ -30,7 +30,6 @@ public class JoinGameStepdefs {
 
     @Autowired
     private StepDefs stepDefs;
-    private Invitation invitation;
 
     @Autowired
     UserRepository playerRepository;
@@ -41,7 +40,7 @@ public class JoinGameStepdefs {
 
     private double pricebefore;
     private int walletbefore;
-    private int game_id;
+    private int game_id=0;
     private int card_id;
 
 
@@ -83,45 +82,30 @@ public class JoinGameStepdefs {
     public void aNewCardHasBeenCreated(String email) throws Throwable {
         Player p = (Player)playerRepository.findByEmail(email);
         Game g = gameRepository.findById(game_id);
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/cards/{id}", this.card_id)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.player",is(p.getUri())))
-                .andExpect(jsonPath("$.game",is(g.getUri())));
+        Card c = cardRepository.findById(card_id);
+        assertThat(c.getGame(), is (g));
+        assertThat(c.getPlayer().toString(), is (p.toString()));
+
     }
 
     @And("^the boolean of beingplaying has been activated \"([^\"]*)\"$")
     public void theBooleanOfBeingplayingHasBeenActivated(String email) throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/players/{email}", email)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.isplaying",is(true)));
+        Player p = (Player)playerRepository.findByEmail(email);
+        assertThat(p.isPlaying(), is (true));
     }
 
 
     @And("^the jackpot has increased by (\\d+)$")
     public void theJackpotHasIncreasedBy(int price) throws Throwable{
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/games/{id}", this.game_id)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.bingoPrice",is(this.pricebefore+price)));
+        Game g = gameRepository.findById(game_id);
+        assertThat(g.getBingoPrice(), is (this.pricebefore+price));
     }
 
 
     @And("^the wallet has decreased by (\\d+) for \"([^\"]*)\"$")
     public void theWalletHasDecreasedByFor(int price, String email) throws Throwable {
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/players/{email}", email)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(jsonPath("$.wallet",is(this.walletbefore+price)));
+        Player p = (Player)playerRepository.findByEmail(email);
+        assertThat(p.getWallet(), is (this.walletbefore-price));
     }
 
     @And("^the boolean of beingplaying of player \"([^\"]*)\" was activated$")
@@ -136,8 +120,11 @@ public class JoinGameStepdefs {
     public void userJoinToAGame(String email) throws Throwable {
         Game g = gameRepository.findById(game_id);
         JSONObject card = new JSONObject();
-        card.put("game", g.getUri());
-        card.put("price",2);
+        card.put("price", 3);
+        if (game_id != 0) {
+            card.put("game", g.getUri());
+        }
+
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/cards")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -148,6 +135,10 @@ public class JoinGameStepdefs {
 
         Player p = (Player) playerRepository.findByEmail(email);
         Card c = cardRepository.findByPlayer(p);
-        this.card_id = c.getId();
+        if (c!= null){
+            this.card_id = c.getId();
+        }
+
+
     }
 }
