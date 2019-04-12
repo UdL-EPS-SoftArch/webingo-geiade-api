@@ -23,8 +23,8 @@ Feature: Invite Player
 
   Scenario: Invite a player to Game that I already invited
     Given I login as "player1" with password "password"
-    And I already invited the player with email "dani@webingo.org" and username "danicolomer"
     When I create an invitation with message "Wanna join my game?"
+    And I already invited the player with email "dani@webingo.org" and username "danicolomer"
     Then The response code is 406
     And It has not been created any invitation
 

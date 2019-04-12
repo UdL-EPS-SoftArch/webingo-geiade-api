@@ -127,6 +127,7 @@ public class InvitePlayertepdefs {
         playerRepository.save(already_invited);
 
         sameinvitation.setPlayerInvited(already_invited);
+        invitationRepository.save(sameinvitation);
 
         String invitation = stepDefs.mapper.writeValueAsString(sameinvitation);
         stepDefs.result = stepDefs.mockMvc.perform(
@@ -137,6 +138,6 @@ public class InvitePlayertepdefs {
                         .with(AuthenticationStepDefs.authenticate()))
                 .andDo(print());
 
-        invitationRepository.save(sameinvitation);
+
     }
 }
