@@ -27,7 +27,7 @@ public class Game extends UriEntity<Integer>{
     private boolean isFinished;
 
     private double linePrize, bingoPrize;
-
+    private int numberofplayers;
 
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)

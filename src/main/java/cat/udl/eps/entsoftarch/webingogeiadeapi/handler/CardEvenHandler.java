@@ -30,7 +30,7 @@ public class CardEvenHandler {
     public void handleCardPreCreate(Card card) throws JoinGameException{
         Player p = (Player)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Player p2 = (Player) playerRepository.findByEmail(p.getEmail());
-        int moneyP= p2.getWallet();
+        double moneyP= p2.getWallet();
         if (moneyP>card.getPrice() && !p2.isPlaying()){
             p2.setWallet(moneyP-card.getPrice());
             p2.setPlaying(true);

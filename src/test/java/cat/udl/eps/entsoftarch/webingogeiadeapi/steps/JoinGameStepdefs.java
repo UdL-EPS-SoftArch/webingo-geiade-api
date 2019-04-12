@@ -39,7 +39,7 @@ public class JoinGameStepdefs {
     CardRepository cardRepository;
 
     private double pricebefore;
-    private int walletbefore;
+    private double walletbefore;
     private int game_id=0;
     private int card_id;
 
@@ -55,7 +55,7 @@ public class JoinGameStepdefs {
 
 
     @And("^the player \"([^\"]*)\" has more wallet than price (\\d+)$")
-    public void thePlayerHasMoreWalletThanPrice(String email, int price) {
+    public void thePlayerHasMoreWalletThanPrice(String email, double price) {
         Player p = (Player)playerRepository.findByEmail(email);
         p.setWallet(10);
         playerRepository.save(p);
@@ -64,7 +64,7 @@ public class JoinGameStepdefs {
     }
 
     @And("^the player \"([^\"]*)\" has less money (\\d+)$")
-    public void thePlayerHasLessMoney(String email, int price){
+    public void thePlayerHasLessMoney(String email, double price){
         Player p = (Player) playerRepository.findByEmail(email);
         p.setWallet(2);
         playerRepository.save(p);

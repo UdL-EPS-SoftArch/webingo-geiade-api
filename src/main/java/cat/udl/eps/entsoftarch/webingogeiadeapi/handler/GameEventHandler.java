@@ -117,6 +117,8 @@ public class GameEventHandler {
         }
 
         if (game.isFinished()) {
+            Player bingoWinner = game.getBingoWinner();
+            Player LineWinner = game.getLineWinner();
             if ((game.getLineWinner() == null) || (game.getBingoWinner() == null) ) {
                 throw new GameException("Game has finished without a line or bingo winner");
             }

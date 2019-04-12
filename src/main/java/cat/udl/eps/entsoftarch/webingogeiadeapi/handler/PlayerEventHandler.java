@@ -47,7 +47,7 @@ public class PlayerEventHandler {
         }
 
         if (player.getToWallet() != 0) {
-            int wallet = player.getWallet();
+            double wallet = player.getWallet();
             int value = player.getToWallet();
             if (value < 5) {
                 throw new DepositMoneyException("Not enought money");
@@ -85,6 +85,7 @@ public class PlayerEventHandler {
             player.encodePassword();
             playerRepository.save(player);
         }
+
     }
 
     @HandleAfterDelete
