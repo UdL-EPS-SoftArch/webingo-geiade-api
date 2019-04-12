@@ -58,10 +58,10 @@ public class GameEventHandler {
 
     @HandleAfterCreate
     public void handleGamePostCreate(Game game){
+        System.out.println("entra after create");
         game.setNumberofplayers(numberofplayers);
         game.setPrice(gameprice);
         gameRepository.save(game);
-        System.out.println("entra after create");
     }
 
     @HandleAfterDelete

@@ -3,7 +3,7 @@ Feature: Deliver Prizes
 
   Scenario: The system delivers prizes to two winners done correctly
     Given I login as "admin" with password "password"
-    Given The player "player1@webingo.org" won the line and the player "player2@webingo.org" won the bingo
+    And The player "player1@webingo.org" won the line and the player "player2@webingo.org" won the bingo
     And There is a line prize and a bingo prize in the current game
     And There is a game with named "geiade-game" that has already finished
     When I deliver prizes to the winning players
@@ -12,7 +12,7 @@ Feature: Deliver Prizes
 
   Scenario: The system delivers prizes correctly to the same player who won the lineprize and the bingorize
     Given I login as "admin" with password "password"
-    Given The player "player1@webingo.org" won the line and bingo at the same game
+    And The player "player1@webingo.org" won the line and bingo at the same game
     And There is a line prize and a bingo prize in the current game
     And There is a game with named "geiade-game" that has already finished
     When I deliver prizes to the only winner
@@ -24,7 +24,7 @@ Feature: Deliver Prizes
 
   Scenario: The system fails to deliver cause the game didn't finish yet
     Given I login as "admin" with password "password"
-    Given The player "player1@webingo.org" won the line and the player "player2@webingo.org" won the bingo
+    And The player "player1@webingo.org" won the line and the player "player2@webingo.org" won the bingo
     And There is a line prize and a bingo prize in the current game
     And There is a game with named "geiade-game" that didn't finish yet
     When I deliver prizes to the winning players
