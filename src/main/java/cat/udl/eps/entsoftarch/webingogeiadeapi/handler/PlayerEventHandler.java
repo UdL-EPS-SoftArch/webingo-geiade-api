@@ -42,7 +42,7 @@ public class PlayerEventHandler {
         logger.info("Before updating: {}", player.toString());
         // TEST IF WHO IS MAKING THE DEPOSIT IS THE OWNER OF THE WALLET
         Player p = (Player) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (p.getUsername().equals(player.getUsername()) == false) {
+        if (!p.getUsername().equals(player.getUsername())) {
             throw new NotAuthorizedException("User not authorized to do this");
         }
 
@@ -81,7 +81,7 @@ public class PlayerEventHandler {
     @HandleAfterSave
     public void handlePlayerPostSave(Player player){
         logger.info("After updating: {}", player.toString());
-        if (player.isPasswordEncoded() == false) {
+        if (!player.isPasswordEncoded()) {
             player.encodePassword();
             playerRepository.save(player);
         }
