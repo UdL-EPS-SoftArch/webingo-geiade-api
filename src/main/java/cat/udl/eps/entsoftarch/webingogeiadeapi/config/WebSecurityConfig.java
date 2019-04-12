@@ -36,6 +36,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers(HttpMethod.PUT, "/**/*").authenticated()
         .antMatchers(HttpMethod.PATCH, "/**/*").authenticated()
         .antMatchers(HttpMethod.DELETE, "/**/*").authenticated()
+
+        // GAME SECURITY
+        .antMatchers(HttpMethod.POST, "/games*/**").hasRole("ADMIN")
+        .antMatchers(HttpMethod.DELETE, "/games*/**").hasRole("ADMIN")
+
+
         .anyRequest().permitAll()
         .and()
         .httpBasic().realmName("WEBingo")
