@@ -42,3 +42,10 @@ Feature: Register Player
     Then The response code is 400
     And The error message is "length must be between 8 and 256"
     And It has not been created a player with username "player"
+
+  Scenario: Change the password of an existing player
+    Given I login as "player1" with password "password"
+    When I change "player1@webingo.org" password to "password2"
+    Then The response code is 200
+    And I login as "player1" with password "password2"
+    And It has been created a player with username "player1" and email "player1@webingo.org", the password is not returned
