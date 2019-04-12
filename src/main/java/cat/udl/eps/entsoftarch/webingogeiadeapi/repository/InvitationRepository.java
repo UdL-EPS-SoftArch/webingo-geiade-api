@@ -12,6 +12,6 @@ import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
 @RepositoryRestResource
 
 public interface InvitationRepository extends PagingAndSortingRepository<Invitation, Integer> {
-    //List<Invitation> findByPlayerInvited(@Param("player_invited") Player player_invited);
+
     Optional <Invitation> findByPlayerInvited (Player playerInvited);
 }
