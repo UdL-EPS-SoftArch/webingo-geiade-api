@@ -7,7 +7,7 @@ Feature: Register Player
     Given I login as "admin" with password "password"
     When I register a new player with username "player", email "player@webingo.org" and password "password"
     Then The response code is 201
-    And It has been created a player with username "plyer" and email "player@webingo.org", the password is not returned
+    And It has been created a player with username "player" and email "player@webingo.org", the password is not returned
 
   Scenario: Try to register new player without authenticating
     Given I'm not logged in
