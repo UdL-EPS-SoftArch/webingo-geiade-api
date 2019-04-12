@@ -32,4 +32,3 @@ public class Game extends UriEntity<Integer>{
         return id;
     }
 }
-

@@ -16,7 +16,6 @@ public class Player extends User {
 	private int wallet;
 	private boolean isPlaying;
 
-
 	@Override
 	@Transient
 	/**

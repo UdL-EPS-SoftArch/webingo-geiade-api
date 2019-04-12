@@ -25,5 +25,4 @@ public class Card {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private Player player;
-
 }

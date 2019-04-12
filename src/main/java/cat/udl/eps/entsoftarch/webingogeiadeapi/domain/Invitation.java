@@ -19,7 +19,6 @@ public class Invitation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private int id_game;
-
     private boolean isUnderway;
     private boolean isAccepted;
     private boolean timeout;
