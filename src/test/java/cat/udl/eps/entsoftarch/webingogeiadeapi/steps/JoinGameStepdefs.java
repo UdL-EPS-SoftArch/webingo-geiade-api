@@ -149,5 +149,7 @@ public class JoinGameStepdefs {
         Player p = (Player) playerRepository.findByEmail(email);
         Card c = cardRepository.findByPlayer(p);
         this.card_id = c.getId();
+        
+
     }
 }
