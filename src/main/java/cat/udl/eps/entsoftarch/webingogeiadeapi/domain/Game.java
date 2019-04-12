@@ -27,7 +27,20 @@ public class Game extends UriEntity<Integer>{
     private boolean isFinished;
 
     private double linePrize, bingoPrize;
+
+
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
     private Player lineWinner, bingoWinner;
+    private int price;
+
+    /**
+     * This function returns a collection of player credentials.
+     * Returns the collection of granted authority for the user.
+     */
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_PLAYER");
+    }
 
     @Override
     public Integer getId() {

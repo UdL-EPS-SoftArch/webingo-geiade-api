@@ -55,7 +55,6 @@ class User <<User>> {
 class Player <<User>> extends User {
     Integer wallet
     Boolean isPlaying
-
 }
 Card "playedBy 1" --> "plays 1" Player
 Invitation "many" <-- "1" Player : invites
