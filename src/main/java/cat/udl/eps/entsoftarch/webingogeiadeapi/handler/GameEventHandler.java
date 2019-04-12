@@ -4,6 +4,7 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.handler;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.handler.exception.GameException;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.GameRepository;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,12 @@ public class GameEventHandler {
     @Autowired
     GameRepository gameRepository;
 
+    @Autowired
+    PlayerRepository playerRepository;
+
+    private int gameprice = 5;
+    private int numberofplayers = 10;
+
     @HandleBeforeCreate
     public void handleGamerPreCreate(Game game) {
         logger.info("Before creating: {}", game.toString());
@@ -51,7 +58,10 @@ public class GameEventHandler {
 
     @HandleAfterCreate
     public void handleGamePostCreate(Game game){
-        logger.info("After creating: {}", game.toString());
+        game.setNumberofplayers(numberofplayers);
+        game.setPrice(gameprice);
+        gameRepository.save(game);
+        System.out.println("entra after create");
     }
 
     @HandleAfterDelete
@@ -66,6 +76,9 @@ public class GameEventHandler {
 
     @HandleAfterSave
     public void handleGamePostSave(Game game) throws ShowResultException{
+
+        game.setLinePrize(game.getNumberofplayers()*game.getPrice()*0.25);
+        game.setBingoPrize((game.getPrice()*game.getNumberofplayers()) - (game.getLinePrize()));
 
         if (game.getBingoWinner()!=null){
             Boolean real = true;
