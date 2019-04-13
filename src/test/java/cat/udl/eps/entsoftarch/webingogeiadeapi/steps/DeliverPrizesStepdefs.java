@@ -7,12 +7,13 @@ import cucumber.api.java.en.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.junit.Assert.*;
 import org.json.JSONObject;
 import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class DeliverPrizesStepdefs {
@@ -29,20 +30,21 @@ public class DeliverPrizesStepdefs {
     @Autowired
     private CardRepository cardRepository;
 
-
     private Game game;
     private Player lwinner, bwinner;
     private Card cardline, cardbingo;
 
+    private int gamePrice = 5;
+    private int numberOfPlayers = 10;
+    private double lineRatio = 0.25;
 
-    @And("^There is a game with named \"([^\"]*)\" that has already finished$")
+
+    @And("^There is a game named \"([^\"]*)\" that has already finished$")
     public void thereIsAGameWithNameThatFinished(String game_name) throws Throwable {
 
         this.game.setName(game_name);
         this.game.setFinished(true);
         gameRepository.save(this.game);
-
-        assertTrue(this.game.isFinished());
 
     }
 
@@ -50,12 +52,8 @@ public class DeliverPrizesStepdefs {
     @And("^There is a line prize and a bingo prize in the current game$")
     public void thereIsALinePrizeAndABingoPrizeInTheCurrentGame() throws Exception {
 
-        JSONObject game0bject = new JSONObject();
-        game0bject.put("linePrize", this.game.getLinePrize());
-        game0bject.put("bingoPrize", this.game.getBingoPrize());
-
-        cardbingo = cardRepository.findByPlayer(bwinner);
-        cardline = cardRepository.findByPlayer(lwinner);
+        cardbingo = new Card();
+        cardline = new Card();
 
         int[]total = {15,49,51,67,84,4,20,56,71,89,12,44,34,64,75,9,55,63,78,90};
         int[][] bingonums ={{4,20,56,71,89},{12,44,34,64,75},{9,55,63,78,90}} ;
@@ -63,22 +61,26 @@ public class DeliverPrizesStepdefs {
         this.cardbingo.setNums(bingonums);
         this.cardline.setNums(linianums);
         this.game.setNums(total);
+        this.game.setLinePrize(numberOfPlayers*gamePrice*lineRatio);
+        this.game.setBingoPrize(numberOfPlayers*gamePrice*(1-lineRatio));
+
         gameRepository.save(this.game);
         cardRepository.save(this.cardbingo);
         cardRepository.save(this.cardline);
 
+        JSONObject game0bject = new JSONObject();
+        game0bject.put("linePrize", this.game.getLinePrize());
+        game0bject.put("bingoPrize", this.game.getBingoPrize());
+
         stepDefs.result = stepDefs.mockMvc.perform(
-                patch("/games/{id}", this.game.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(game0bject.toString())
+                get("/games/{id}", this.game.getId())
                         .accept(MediaType.APPLICATION_JSON)
                         .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print());
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.bingoPrize", is(greaterThan (0.0))))
+                .andExpect(jsonPath("$.linePrize", is(greaterThan (0.0))));
 
-        System.out.println(this.game);
-
-        assertThat(this.game.getBingoPrize(), greaterThan (0.0));
-        assertThat(this.game.getLinePrize(), greaterThan (0.0));
     }
 
     @And("^The player \"([^\"]*)\" won the line and the player \"([^\"]*)\" won the bingo$")
@@ -89,6 +91,8 @@ public class DeliverPrizesStepdefs {
         this.game = new Game();
         this.game.setBingoWinner(bwinner);
         this.game.setLineWinner(lwinner);
+        game.setNumberofplayers(numberOfPlayers);
+        game.setPrice(gamePrice);
         playerRepository.save(bwinner);
         playerRepository.save(lwinner);
         gameRepository.save(this.game);
@@ -97,6 +101,7 @@ public class DeliverPrizesStepdefs {
         assertEquals(this.game.getBingoWinner(), bwinner);
 
         JSONObject game0bject = new JSONObject();
+
         game0bject.put("name", "name");
         game0bject.put("lineWinner", lwinner.getUri());
         game0bject.put("bingoWinner", bwinner.getUri());
@@ -169,5 +174,37 @@ public class DeliverPrizesStepdefs {
         playerRepository.save(bwinner);
 
         //assertEquals(0, bwinner.getWallet().compareTo(oldwallet+this.game.getLinePrize()+this.game.getBingoPrize()));
+    }
+
+    @And("^There is a bad line prize and a bingo prize in the current game$")
+    public void thereIsABadLinePrizeAndABingoPrizeInTheCurrentGame() throws  Exception{
+        cardbingo = new Card();
+        cardline = new Card();
+
+        int[]total = {15,49,51,67,84,4,20,56,71,89,12,44,34,64,75,9,55,63,78,90};
+        int[][] bingonums ={{4,20,56,71,89},{12,44,34,64,75},{9,55,63,78,90}} ;
+        int[][] linianums ={{4,56},{15,49,51,67,84},{11,55,63,65,80}} ;
+        this.cardbingo.setNums(bingonums);
+        this.cardline.setNums(linianums);
+        this.game.setNums(total);
+        this.game.setLinePrize(-4);
+        this.game.setBingoPrize(0);
+
+        gameRepository.save(this.game);
+        cardRepository.save(this.cardbingo);
+        cardRepository.save(this.cardline);
+
+        JSONObject game0bject2 = new JSONObject();
+        game0bject2.put("linePrize", this.game.getLinePrize());
+        game0bject2.put("bingoPrize", this.game.getBingoPrize());
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/games/{id}", this.game.getId())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.bingoPrize", is(greaterThan (0.0))))
+                .andExpect(jsonPath("$.linePrize", is(greaterThan (0.0))));
     }
 }

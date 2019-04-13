@@ -33,10 +33,6 @@ public class GameEventHandler {
     @Autowired
     PlayerRepository playerRepository;
 
-    private int gamePrice = 5;
-    private int numberOfPlayers = 10;
-    private double lineRatio = 0.25;
-
     @HandleBeforeCreate
     public void handleGamerPreCreate(Game game) {
         logger.info("Before creating: {}", game.toString());
@@ -60,11 +56,8 @@ public class GameEventHandler {
     @HandleAfterCreate
     public void handleGamePostCreate(Game game){
         System.out.println("entra after create");
-        game.setNumberofplayers(numberOfPlayers);
-        game.setPrice(gamePrice);
-        game.setLinePrize(game.getNumberofplayers()*game.getPrice()*lineRatio);
-        game.setBingoPrize((game.getPrice()*game.getNumberofplayers()) - (game.getLinePrize()));
-        gameRepository.save(game);
+        if (game.isFinished() || game.getBingoWinner() != null || game.getLineWinner() != null)
+            throw new GameException("There was an error while creating the game");
     }
 
     @HandleAfterDelete
@@ -80,8 +73,8 @@ public class GameEventHandler {
     @HandleAfterSave
     public void handleGamePostSave(Game game) throws ShowResultException{
 
-        game.setLinePrize(game.getNumberofplayers()*game.getPrice()*lineRatio);
-        game.setBingoPrize((game.getPrice()*game.getNumberofplayers()) - (game.getLinePrize()));
+        /*game.setLinePrize(game.getNumberofplayers()*game.getPrice()*lineRatio);
+        game.setBingoPrize((game.getPrice()*game.getNumberofplayers()) - (game.getLinePrize()));*/
         System.out.println("entra after save");
         if (game.getBingoWinner()!=null){
             Boolean real = true;
@@ -142,8 +135,6 @@ public class GameEventHandler {
                 throw new GameException("Game has finished without a line or bingo winner");
             }
         }
-
-        gameRepository.save(game);
 
     }
 

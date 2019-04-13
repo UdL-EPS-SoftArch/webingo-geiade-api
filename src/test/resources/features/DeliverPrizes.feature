@@ -5,7 +5,7 @@ Feature: Deliver Prizes
     Given I login as "admin" with password "password"
     And The player "player1@webingo.org" won the line and the player "player2@webingo.org" won the bingo
     And There is a line prize and a bingo prize in the current game
-    And There is a game with named "geiade-game" that has already finished
+    And There is a game named "geiade-game" that has already finished
     When I deliver prizes to the winning players
     Then The game is completely finished
 
@@ -14,7 +14,7 @@ Feature: Deliver Prizes
     Given I login as "admin" with password "password"
     And The player "player1@webingo.org" won the line and bingo at the same game
     And There is a line prize and a bingo prize in the current game
-    And There is a game with named "geiade-game" that has already finished
+    And There is a game named "geiade-game" that has already finished
     When I deliver prizes to the only winner
     Then The game is completely finished
 
@@ -23,9 +23,10 @@ Feature: Deliver Prizes
     Given I login as "admin" with password "password"
     And The player "player1@webingo.org" won the line and the player "player2@webingo.org" won the bingo
     And There is a bad line prize and a bingo prize in the current game
-    And There is a game with named "geiade-game" that has already finished
+    And There is a game named "geiade-game" that has already finished
     When I deliver prizes to the winning players
     Then The response code is 404
+
 
 
   Scenario: The system fails to deliver cause the game didn't finish yet
