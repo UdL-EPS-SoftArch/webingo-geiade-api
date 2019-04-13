@@ -55,7 +55,6 @@ public class GameEventHandler {
 
     @HandleAfterCreate
     public void handleGamePostCreate(Game game){
-        System.out.println("entra after create");
         if (game.isFinished() || game.getBingoWinner() != null || game.getLineWinner() != null)
             throw new GameException("There was an error while creating the game");
     }
@@ -73,21 +72,16 @@ public class GameEventHandler {
     @HandleAfterSave
     public void handleGamePostSave(Game game) throws ShowResultException{
 
-        /*game.setLinePrize(game.getNumberofplayers()*game.getPrice()*lineRatio);
-        game.setBingoPrize((game.getPrice()*game.getNumberofplayers()) - (game.getLinePrize()));*/
-        System.out.println("entra after save");
         if (game.getBingoWinner()!=null){
             Boolean real = true;
             Player p = game.getBingoWinner();
             Card c = cardRepository.findByPlayer(p);
             if (c==null){
-                System.out.println("entra exceo 1");
                 throw new ShowResultException("The player does not have any card!");
             }
             int [] gamesN = game.getNums();
 
             if (gamesN == null){
-                System.out.println("entra excep 2");
                 throw new ShowResultException("The game does not have any number yet! It is not posible to sing Bingo");
             }
             int [][] playerN = c.getNums();
@@ -98,7 +92,6 @@ public class GameEventHandler {
                 }
             }
             if (!real){
-                System.out.println("entra excep 3");
                 throw new ShowResultException("The player does not have all the bingo numbers!!");
             }
         }
@@ -129,10 +122,16 @@ public class GameEventHandler {
         }
 
         if (game.isFinished()) {
-            Player bingoWinner = game.getBingoWinner();
-            Player LineWinner = game.getLineWinner();
             if ((game.getLineWinner() == null) || (game.getBingoWinner() == null) ) {
                 throw new GameException("Game has finished without a line or bingo winner");
+            }
+            if ((game.getLinePrize() < 0.0) || (game.getBingoPrize() < 0.0 )) {
+                throw new GameException("Game has finished without a good saved line/bingo prize");
+            }
+        }
+        else if (!game.isFinished()) {
+            if ((game.getLineWinner() != null) || (game.getBingoWinner() != null) ) {
+                throw new GameException("Game hasn't finished but there is a line or bingo winner");
             }
         }
 

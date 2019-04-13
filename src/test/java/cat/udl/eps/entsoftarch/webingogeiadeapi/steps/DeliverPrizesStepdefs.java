@@ -42,9 +42,17 @@ public class DeliverPrizesStepdefs {
     @And("^There is a game named \"([^\"]*)\" that has already finished$")
     public void thereIsAGameWithNameThatFinished(String game_name) throws Throwable {
 
-        this.game.setName(game_name);
-        this.game.setFinished(true);
-        gameRepository.save(this.game);
+        JSONObject game0bject3 = new JSONObject();
+        game0bject3.put("name", game_name);
+
+        stepDefs.result = stepDefs.mockMvc.perform(
+                get("/games/{id}", this.game.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(game0bject3.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print())
+                .andExpect(jsonPath("$.finished", is(true)));
 
     }
 
@@ -63,6 +71,7 @@ public class DeliverPrizesStepdefs {
         this.game.setNums(total);
         this.game.setLinePrize(numberOfPlayers*gamePrice*lineRatio);
         this.game.setBingoPrize(numberOfPlayers*gamePrice*(1-lineRatio));
+        this.game.setFinished(true);
 
         gameRepository.save(this.game);
         cardRepository.save(this.cardbingo);
@@ -86,25 +95,29 @@ public class DeliverPrizesStepdefs {
     @And("^The player \"([^\"]*)\" won the line and the player \"([^\"]*)\" won the bingo$")
     public void thePlayerWonTheLineAndThePlayerWonTheBingo(String linewinner_email, String bingowinner_email) throws Throwable {
 
-        lwinner = (Player) playerRepository.findByEmail(linewinner_email);
-        bwinner = (Player) playerRepository.findByEmail(bingowinner_email);
         this.game = new Game();
-        this.game.setBingoWinner(bwinner);
-        this.game.setLineWinner(lwinner);
         game.setNumberofplayers(numberOfPlayers);
         game.setPrice(gamePrice);
-        playerRepository.save(bwinner);
-        playerRepository.save(lwinner);
-        gameRepository.save(this.game);
-
-        assertEquals(this.game.getLineWinner(), lwinner);
-        assertEquals(this.game.getBingoWinner(), bwinner);
 
         JSONObject game0bject = new JSONObject();
-
         game0bject.put("name", "name");
-        game0bject.put("lineWinner", lwinner.getUri());
-        game0bject.put("bingoWinner", bwinner.getUri());
+
+        if (lwinner !=null ) {
+            lwinner = (Player) playerRepository.findByEmail(linewinner_email);
+            this.game.setLineWinner(lwinner);
+            playerRepository.save(lwinner);
+            gameRepository.save(this.game);
+            assertEquals(this.game.getLineWinner(), lwinner);
+            game0bject.put("lineWinner", lwinner.getUri());
+        }
+        if (bwinner != null) {
+            bwinner = (Player) playerRepository.findByEmail(bingowinner_email);
+            this.game.setBingoWinner(bwinner);
+            playerRepository.save(bwinner);
+            gameRepository.save(this.game);
+            assertEquals(this.game.getBingoWinner(), bwinner);
+            game0bject.put("bingoWinner", bwinner.getUri());
+        }
 
         stepDefs.result = stepDefs.mockMvc.perform(
                 post("/games")
@@ -118,44 +131,50 @@ public class DeliverPrizesStepdefs {
 
 
     @When("^I deliver prizes to the winning players$")
-    public void iDeliverPrizesToTheWinningPlayers() {
-        double oldwalletline = lwinner.getWallet();
-        double oldwalletbingo = bwinner.getWallet();
-        lwinner.setWallet(oldwalletline + this.game.getLinePrize());
-        lwinner.setWallet(oldwalletbingo + this.game.getBingoPrize());
-        playerRepository.save(lwinner);
-        playerRepository.save(bwinner);
+    public void iDeliverPrizesToTheWinningPlayers() throws Exception{
 
-        //assertEquals(0, lwinner.getWallet().compareTo(oldwalletline+this.game.getLinePrize()));
-        //assertEquals(0, bwinner.getWallet().compareTo(oldwalletbingo+this.game.getBingoPrize()));
-    }
+        JSONObject gameObject = new JSONObject();
+        double oldwalletline = 0.0;
+        double oldwalletbingo = 0.0;
 
-    @Given("^The player \"([^\"]*)\" won the line and bingo at the same game$")
-    public void thePlayerWonTheLineAndBingoAtTheSameGame(String winner_email) throws Throwable {
+        if (lwinner != null) {
+            oldwalletline = lwinner.getWallet();
+            gameObject.put("linePrize", this.game.getLinePrize());
+            lwinner.setWallet(oldwalletline + this.game.getLinePrize());
+            playerRepository.save(lwinner);
+            assertEquals((long) lwinner.getWallet(), (long) (oldwalletline + this.game.getLinePrize()));
+        }
+        if (bwinner != null) {
+            oldwalletbingo = bwinner.getWallet();
+            gameObject.put("bingoPrize", this.game.getBingoPrize());
+            bwinner.setWallet(oldwalletbingo + this.game.getBingoPrize());
+            playerRepository.save(bwinner);
+            assertEquals((long) bwinner.getWallet(), (long) (oldwalletbingo + this.game.getBingoPrize()));
+        }
 
-        Player winner = (Player) playerRepository.findByEmail(winner_email);
-        lwinner = winner;
-        bwinner = winner;
-        this.game = new Game();
-        this.game.setBingoWinner(bwinner);
-        this.game.setLineWinner(lwinner);
-        playerRepository.save(bwinner);
-        playerRepository.save(lwinner);
-        gameRepository.save(this.game);
-
-        assertEquals(this.game.getLineWinner(), lwinner);
-        assertEquals(this.game.getBingoWinner(), bwinner);
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/game/{id}", this.game.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(gameObject.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
     }
 
     @Given("^There is a game with named \"([^\"]*)\" that didn't finish yet$")
     public void givenThereIsAGameWithNamedThatDidnTFinishYet(String game_name) throws Throwable {
 
-        this.game = new Game();
-        this.game.setName(game_name);
-        this.game.setFinished(false);
-        gameRepository.save(this.game);
+        JSONObject game0bject3 = new JSONObject();
+        game0bject3.put("name", game_name);
 
-        assertFalse(this.game.isFinished());
+        stepDefs.result = stepDefs.mockMvc.perform(
+                patch("/games/{id}", this.game.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(game0bject3.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                        .with(AuthenticationStepDefs.authenticate()))
+                .andDo(print());
+
     }
 
     @Then("^The game is completely finished$")
@@ -164,20 +183,10 @@ public class DeliverPrizesStepdefs {
         this.game.setNumberofplayers(0);
         this.game.setLineWinner(null);
         this.game.setBingoWinner(null);
-        //gameRepository.delete(this.game);
-    }
-
-    @When("^I deliver prizes to the only winner$")
-    public void iDeliverPrizesToTheOnlyWinner() {
-        double oldwallet = bwinner.getWallet();
-        lwinner.setWallet(oldwallet + this.game.getLinePrize() + this.game.getBingoPrize());
-        playerRepository.save(bwinner);
-
-        //assertEquals(0, bwinner.getWallet().compareTo(oldwallet+this.game.getLinePrize()+this.game.getBingoPrize()));
     }
 
     @And("^There is a bad line prize and a bingo prize in the current game$")
-    public void thereIsABadLinePrizeAndABingoPrizeInTheCurrentGame() throws  Exception{
+    public void thereIsABadLinePrizeAndABingoPrizeInTheCurrentGame() throws Exception{
         cardbingo = new Card();
         cardline = new Card();
 
@@ -187,24 +196,13 @@ public class DeliverPrizesStepdefs {
         this.cardbingo.setNums(bingonums);
         this.cardline.setNums(linianums);
         this.game.setNums(total);
-        this.game.setLinePrize(-4);
-        this.game.setBingoPrize(0);
+        this.game.setLinePrize(-4.0);
+        this.game.setBingoPrize(-30.9);
+        this.game.setFinished(true);
 
         gameRepository.save(this.game);
         cardRepository.save(this.cardbingo);
         cardRepository.save(this.cardline);
 
-        JSONObject game0bject2 = new JSONObject();
-        game0bject2.put("linePrize", this.game.getLinePrize());
-        game0bject2.put("bingoPrize", this.game.getBingoPrize());
-
-        stepDefs.result = stepDefs.mockMvc.perform(
-                get("/games/{id}", this.game.getId())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .with(AuthenticationStepDefs.authenticate()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.bingoPrize", is(greaterThan (0.0))))
-                .andExpect(jsonPath("$.linePrize", is(greaterThan (0.0))));
     }
 }
