@@ -129,11 +129,6 @@ public class GameEventHandler {
                 throw new GameException("Game has finished without a good saved line/bingo prize");
             }
         }
-        else if (!game.isFinished()) {
-            if ((game.getLineWinner() != null) || (game.getBingoWinner() != null) ) {
-                throw new GameException("Game hasn't finished but there is a line or bingo winner");
-            }
-        }
 
     }
 
