@@ -49,7 +49,6 @@ class User <<User>> {
     String email
     String password
     Boolean admin
-
 }
 
 class Player <<User>> extends User {

@@ -35,7 +35,6 @@ public class AuthenticationStepDefs {
         currentUsername = currentPassword = null;
     }
 
-
     @Given("^I login with password \"([^\"]*)\" and a username \"([^\"]*)\"$")
     public void iLoginWithPasswordAndAUsername(String username, String password) throws Throwable {
         AuthenticationStepDefs.currentUsername = username;
