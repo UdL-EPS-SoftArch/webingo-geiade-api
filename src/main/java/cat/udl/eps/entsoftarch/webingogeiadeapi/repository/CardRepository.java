@@ -15,6 +15,5 @@ public interface CardRepository extends PagingAndSortingRepository<Card, Integer
    */
   //List<Game> findByNameContaining(@Param("text") String text);
   Card findById(int id);
-
-  Card findByPlayer(Player p);
+  Card findByPlayer(Player player);
 }
