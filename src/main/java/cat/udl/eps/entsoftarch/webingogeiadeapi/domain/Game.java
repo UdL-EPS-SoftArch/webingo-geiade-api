@@ -3,9 +3,11 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,14 +26,6 @@ public class Game extends UriEntity<Integer>{
     private double linePrice, bingoPrice;
     private Player lineWinner, bingoWinner;
     private int price;
-
-    /**
-     * This function returns a collection of player credentials.
-     * Returns the collection of granted authority for the user.
-     */
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_PLAYER");
-    }
 
     @Override
     public Integer getId() {
