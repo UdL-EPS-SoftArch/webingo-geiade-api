@@ -82,17 +82,19 @@ public class GameEventHandler {
 
         game.setLinePrize(game.getNumberofplayers()*game.getPrice()*lineRatio);
         game.setBingoPrize((game.getPrice()*game.getNumberofplayers()) - (game.getLinePrize()));
-
+        System.out.println("entra after save");
         if (game.getBingoWinner()!=null){
             Boolean real = true;
             Player p = game.getBingoWinner();
             Card c = cardRepository.findByPlayer(p);
             if (c==null){
+                System.out.println("entra exceo 1");
                 throw new ShowResultException("The player does not have any card!");
             }
             int [] gamesN = game.getNums();
 
             if (gamesN == null){
+                System.out.println("entra excep 2");
                 throw new ShowResultException("The game does not have any number yet! It is not posible to sing Bingo");
             }
             int [][] playerN = c.getNums();
@@ -103,6 +105,7 @@ public class GameEventHandler {
                 }
             }
             if (!real){
+                System.out.println("entra excep 3");
                 throw new ShowResultException("The player does not have all the bingo numbers!!");
             }
         }

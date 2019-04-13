@@ -24,11 +24,15 @@ public class DeliverPrizesStepdefs {
     private GameRepository gameRepository;
 
     @Autowired
-    UserRepository playerRepository;
+    private UserRepository playerRepository;
+
+    @Autowired
+    private CardRepository cardRepository;
 
 
     private Game game;
     private Player lwinner, bwinner;
+    private Card cardline, cardbingo;
 
 
     @And("^There is a game with named \"([^\"]*)\" that has already finished$")
@@ -50,8 +54,21 @@ public class DeliverPrizesStepdefs {
         game0bject.put("linePrize", this.game.getLinePrize());
         game0bject.put("bingoPrize", this.game.getBingoPrize());
 
+        cardbingo = cardRepository.findByPlayer(bwinner);
+        cardline = cardRepository.findByPlayer(lwinner);
+
+        int[]total = {15,49,51,67,84,4,20,56,71,89,12,44,34,64,75,9,55,63,78,90};
+        int[][] bingonums ={{4,20,56,71,89},{12,44,34,64,75},{9,55,63,78,90}} ;
+        int[][] linianums ={{4,56},{15,49,51,67,84},{11,55,63,65,80}} ;
+        this.cardbingo.setNums(bingonums);
+        this.cardline.setNums(linianums);
+        this.game.setNums(total);
+        gameRepository.save(this.game);
+        cardRepository.save(this.cardbingo);
+        cardRepository.save(this.cardline);
+
         stepDefs.result = stepDefs.mockMvc.perform(
-                patch("/games")
+                patch("/games/{id}", this.game.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(game0bject.toString())
                         .accept(MediaType.APPLICATION_JSON)
