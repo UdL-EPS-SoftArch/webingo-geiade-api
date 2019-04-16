@@ -1,7 +1,9 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.handler;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
-import cat.udl.eps.entsoftarch.webingogeiadeapi.handler.exception.JoinGameException;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.handler.exceptions.JoinGameException;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.CardRepository;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Card;
@@ -28,17 +30,18 @@ public class CardEvenHandler {
     public void handleCardPreCreate(Card card) throws JoinGameException{
         Player p = (Player)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Player p2 = (Player) playerRepository.findByEmail(p.getEmail());
-        int moneyP= p2.getWallet();
-        if (moneyP>card.getPrice() && p2.isPlaying()==false){
+        double moneyP= p2.getWallet();
+        if (moneyP>card.getPrice() && !p2.isPlaying()){
             p2.setWallet(moneyP-card.getPrice());
             p2.setPlaying(true);
             card.setPlayer(p2);
             card.setNums(card.randomcard());
 
             Game g = card.getGame();
-            double moneyB = g.getBingoPrice();
-            g.setBingoPrice(moneyB+card.getPrice());
+            double moneyB = g.getBingoPrize();
+            g.setBingoPrize(moneyB+card.getPrice());
             playerRepository.save(p2);
+            //cardRepository.save(card);
         }
 
         else if (card.getGame()==null){

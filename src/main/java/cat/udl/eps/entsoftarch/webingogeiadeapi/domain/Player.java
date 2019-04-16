@@ -11,7 +11,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Player extends User {
-	private int wallet;
+	private double wallet;
 	private int toWallet;
 	private boolean isPlaying;
 

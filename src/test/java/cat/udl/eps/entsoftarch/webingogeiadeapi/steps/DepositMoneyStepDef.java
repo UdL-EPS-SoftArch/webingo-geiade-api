@@ -40,7 +40,7 @@ public class DepositMoneyStepDef {
     }
 
     @And("^\"([^\"]*)\" wallet is (\\d+)$")
-    public void walletIs(String username, int cash) throws Throwable {
+    public void walletIs(String username, double cash) throws Throwable {
         this.player = (Player) playerRepository.findByEmail(username);
 
         stepDefs.result = stepDefs.mockMvc.perform(
