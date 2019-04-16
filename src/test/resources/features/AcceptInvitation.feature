@@ -4,27 +4,29 @@ Feature: Accept Invitation
   I want to accept a new invitation for a game
 
   Scenario: Accept invitation as player
-    Given I login as "username" with password "password"
+    Given I login as "player1" with password "password"
     And Invitation "invitation" is already created and was sent from email "user@webingo.org" to email "player1@webingo.org"
+    And The game is the desired one
     When I accept the invitation "invitation"
-    Then The invitation is accepted
+    Then The response code is 200
 
   Scenario: Accept invitation but the game is finished or underway
-    Given I login as "email" with password "password"
+    Given I login as "player1" with password "password"
     And Invitation "invitation" is already created and was sent from email "user@webingo.org" to email "player1@webingo.org"
-    When I accept the invitation "invitation"
     And The game has already finished or is underway
-    Then The player has not been added to the game
+    When I accept the invitation "invitation"
+    Then The response code is 406
 
   Scenario: Game is not available, invitation time has been exceeded
-    Given I login as "email" with password "password"
+    Given I login as "player1" with password "password"
     And Invitation "invitation" is already created and was sent from email "user@webingo.org" to email "player1@webingo.org"
-    When I accept the invitation "invitation"
     And Timeout has been exceeded
-    Then The player has not been added to the game
+    When I accept the invitation "invitation"
+    Then The response code is 406
 
   Scenario: Reject invitation as player
-    Given I login as "email" with password "password"
+    Given I login as "player1" with password "password"
     And Invitation "invitation" is already created and was sent from email "user@webingo.org" to email "player1@webingo.org"
+    And The game is not the desired one
     When I reject the invitation "invitation"
-    Then The player has not been added to the game
+    Then The response code is 406

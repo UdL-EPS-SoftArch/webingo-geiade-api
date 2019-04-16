@@ -68,11 +68,4 @@ public class StepDefs {
             result.andExpect(jsonPath("$..message", hasItem(containsString(message))));
     }
 
-    @Then("^The invitation is accepted$")
-    public void theInvitationIsAccepted() {
-    }
-
-    @And("^The player has not been added to the game$")
-    public void thePlayerHasNotBeenAddedToTheGame() {
-    }
 }
