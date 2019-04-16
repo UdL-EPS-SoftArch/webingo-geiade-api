@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 public class Player extends User {
 	private int wallet;
 	private int toWallet;
+	private int fromWallet;
 	private boolean isPlaying;
 
 	@Override
