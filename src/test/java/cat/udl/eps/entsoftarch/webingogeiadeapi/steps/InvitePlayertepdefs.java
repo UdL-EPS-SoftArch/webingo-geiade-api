@@ -1,29 +1,17 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.steps;
-
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Invitation;
-import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.InvitationRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
-import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.InvitationRepository;
-import cucumber.api.PendingException;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.When;
-import org.json.JSONObject;
+import cucumber.api.java.en.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.http.MediaType;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
-
-import java.rmi.UnexpectedException;
-
-import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-
 
 
 public class InvitePlayertepdefs {
@@ -37,9 +25,11 @@ public class InvitePlayertepdefs {
     private InvitationRepository invitationRepository;
 
     @Autowired
+    private UserRepository playerrepo;
+
+    @Autowired
     private PlayerRepository playerRepository;
 
-    //Scenario 1
     @WithMockUser
     @When("^I create an invitation with message \"([^\"]*)\"$")
     public void iInviteANewPlayerToTheGameWithUsernameAndMessage(String message) throws Throwable {
@@ -61,7 +51,7 @@ public class InvitePlayertepdefs {
 
     }
 
-    @And("^There is not a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
+    @Given("^There is not a player with username \"([^\"]*)\" and email \"([^\"]*)\"$")
     public void thereIsNotAPlayerWithUsernameAndEmail(String username, String email) throws Throwable {
 
         Player player_not_found= new Player();

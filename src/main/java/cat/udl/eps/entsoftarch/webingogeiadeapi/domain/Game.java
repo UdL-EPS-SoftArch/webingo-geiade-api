@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,8 +20,13 @@ public class Game extends UriEntity<Integer>{
     @Column(unique = true)
     private String name;
 
+    private boolean isFinished;
+    private int numberofplayers;
     private int [] nums, randomList;
-    private double linePrice, bingoPrice;
+    private double linePrize, bingoPrize;
+
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
     private Player lineWinner, bingoWinner;
     private int price;
 
@@ -49,3 +56,4 @@ public class Game extends UriEntity<Integer>{
         return array;
     }
 }
+

@@ -39,7 +39,7 @@ public class JoinGameStepdefs {
     CardRepository cardRepository;
 
     private double pricebefore;
-    private int walletbefore;
+    private double walletbefore;
     private int game_id=0;
     private int card_id;
 
@@ -50,12 +50,12 @@ public class JoinGameStepdefs {
         joc.setName(name);
         Game g = gameRepository.save(joc);
         this.game_id= g.getId();
-        this.pricebefore = g.getBingoPrice();
+        this.pricebefore = g.getBingoPrize();
     }
 
 
     @And("^the player \"([^\"]*)\" has more wallet than price (\\d+)$")
-    public void thePlayerHasMoreWalletThanPrice(String email, int price) {
+    public void thePlayerHasMoreWalletThanPrice(String email, double price) {
         Player p = (Player)playerRepository.findByEmail(email);
         p.setWallet(10);
         playerRepository.save(p);
@@ -64,7 +64,7 @@ public class JoinGameStepdefs {
     }
 
     @And("^the player \"([^\"]*)\" has less money (\\d+)$")
-    public void thePlayerHasLessMoney(String email, int price){
+    public void thePlayerHasLessMoney(String email, double price){
         Player p = (Player) playerRepository.findByEmail(email);
         p.setWallet(2);
         playerRepository.save(p);
@@ -98,7 +98,7 @@ public class JoinGameStepdefs {
     @And("^the jackpot has increased by (\\d+)$")
     public void theJackpotHasIncreasedBy(int price) throws Throwable{
         Game g = gameRepository.findById(game_id);
-        assertThat(g.getBingoPrice(), is (this.pricebefore+price));
+        assertThat(g.getBingoPrize(), is (this.pricebefore+price));
     }
 
 
@@ -138,7 +138,6 @@ public class JoinGameStepdefs {
         if (c!= null){
             this.card_id = c.getId();
         }
-
 
     }
 }
