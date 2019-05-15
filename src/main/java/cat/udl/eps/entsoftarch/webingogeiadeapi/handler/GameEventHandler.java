@@ -37,6 +37,14 @@ public class GameEventHandler {
     public void handleGamerPreCreate(Game game) {
         logger.info("Before creating: {}", game.toString());
     }
+    @HandleAfterCreate
+    public void handleGamerAfterCreate(Game game) {
+        logger.info("After creating: {}", game.toString());
+        game.setPrice(0);
+        game.setBingoPrize(0);
+        game.setLinePrize(0);
+        game.setFinished(false);
+    }
 
     @HandleBeforeSave
     public void handleGamePreSave(Game game){
