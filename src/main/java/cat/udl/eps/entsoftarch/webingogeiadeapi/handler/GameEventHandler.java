@@ -44,6 +44,8 @@ public class GameEventHandler {
         game.setBingoPrize(0);
         game.setLinePrize(0);
         game.setFinished(false);
+        game.setBingoWinner(null);
+        game.setLineWinner(null);
     }
 
     @HandleBeforeSave
