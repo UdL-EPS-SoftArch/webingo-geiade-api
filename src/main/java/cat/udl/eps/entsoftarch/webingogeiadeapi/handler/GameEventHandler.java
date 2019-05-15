@@ -40,7 +40,7 @@ public class GameEventHandler {
     @HandleAfterCreate
     public void handleGamerAfterCreate(Game game) {
         logger.info("After creating: {}", game.toString());
-        game.setPrice(0);
+        game.setPrice(3);
         game.setBingoPrize(0);
         game.setLinePrize(0);
         game.setFinished(false);
