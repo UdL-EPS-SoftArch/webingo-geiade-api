@@ -1,6 +1,9 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 import javax.persistence.*;
 import javax.persistence.Transient;
 
@@ -8,8 +11,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-
-import static java.util.Arrays.sort;
 
 @Entity
 @Data
@@ -29,7 +30,7 @@ public class Card {
     @JoinColumn(unique = true)
     private Player player;
 
-    public List<Integer> randomcard(){
+    public int[][] randomcard(){
         Random rand = new Random();
         int [][] numeros = new int [3][5];
         for (int i=0; i<3; i++){
@@ -38,19 +39,23 @@ public class Card {
             }
         }
         int temp;
-        List<Integer> sortedList = new ArrayList<Integer>();;
         for (int i=0; i<3; i++){
             for (int j=0; j<5; j++){
                 temp = rand.nextInt(100);
-                while (isAlreadyAdded(numeros,temp)==true){
+                while (isAlreadyAdded(numeros, temp)){
                     temp = rand.nextInt(100);
                 }
                 numeros[i][j]= temp;
-                sortedList.add(numeros[i][j]);
             }
         }
-        Collections.sort(sortedList);
-       return sortedList;
+        sortNumbers(numeros);
+        return numeros;
+
+    }
+
+    private void sortNumbers (int [][] numeros){
+        for (int i=0; i<3; i++){
+            Arrays.sort(numeros[i]);}
     }
 
     private boolean isAlreadyAdded(int [][]nums, int x){
