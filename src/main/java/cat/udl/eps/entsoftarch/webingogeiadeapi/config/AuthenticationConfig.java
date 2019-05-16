@@ -22,8 +22,7 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
   @Autowired BasicUserDetailsService basicUserDetailsService;
   @Autowired AdminRepository adminRepository;
   @Autowired PlayerRepository playerRepository;
-  @Autowired
-  GameRepository gameRepository;
+  @Autowired GameRepository gameRepository;
 
   @Override
   public void init(AuthenticationManagerBuilder auth) throws Exception {
@@ -74,11 +73,10 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
       playerRepository.save(player);
     }
 
-    if (!gameRepository.existsById(2)) {
-      Game game = new Game();
-      game.setName("game2");
-      game.setId(2);
-      gameRepository.save(game);
-    }
+//    if (!gameRepository.existsById(1)) {
+//      Game game = new Game();
+//      game.setName("game2");
+//      gameRepository.save(game);
+//    }
   }
 }
