@@ -1,5 +1,6 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.domain;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -41,13 +42,20 @@ public class Card {
         for (int i=0; i<3; i++){
             for (int j=0; j<5; j++){
                 temp = rand.nextInt(100);
-                while (isAlreadyAdded(numeros,temp)==true){
+                while (isAlreadyAdded(numeros, temp)){
                     temp = rand.nextInt(100);
                 }
                 numeros[i][j]= temp;
             }
         }
-       return numeros;
+        sortNumbers(numeros);
+        return numeros;
+
+    }
+
+    private void sortNumbers (int [][] numeros){
+        for (int i=0; i<3; i++){
+            Arrays.sort(numeros[i]);}
     }
 
     private boolean isAlreadyAdded(int [][]nums, int x){
