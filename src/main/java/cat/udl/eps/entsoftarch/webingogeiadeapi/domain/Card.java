@@ -11,6 +11,8 @@ import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
+import static java.util.Arrays.sort;
+
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -47,6 +49,7 @@ public class Card {
                 numeros[i][j]= temp;
             }
         }
+        sort(numeros);
        return numeros;
     }
 
