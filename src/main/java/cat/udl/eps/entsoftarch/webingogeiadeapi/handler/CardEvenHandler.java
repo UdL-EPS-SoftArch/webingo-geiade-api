@@ -8,6 +8,7 @@ import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Card;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Card;
 
+import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.CardRepository;
@@ -24,7 +25,7 @@ public class CardEvenHandler {
     @Autowired
     CardRepository cardRepository;
 
-    @HandleAfterCreate
+    @HandleBeforeCreate
     public void handleCardPreCreate(Card card) throws JoinGameException{
         card.setPrice(3);
         Player p = (Player)SecurityContextHolder.getContext().getAuthentication().getPrincipal();

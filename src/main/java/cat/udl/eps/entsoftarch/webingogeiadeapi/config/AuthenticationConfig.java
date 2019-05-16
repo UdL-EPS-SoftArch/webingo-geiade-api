@@ -76,6 +76,7 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
     if (!gameRepository.existsById(1)) {
       Game game = new Game();
       game.setName("game1");
+//      game.setId(3);
       gameRepository.save(game);
     }
   }
