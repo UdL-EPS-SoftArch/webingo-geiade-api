@@ -120,8 +120,8 @@ public class JoinGameStepdefs {
     public void userJoinToAGame(String email) throws Throwable {
         Game g = gameRepository.findById(game_id);
         JSONObject card = new JSONObject();
-        card.put("price", 3);
         if (game_id != 0) {
+            card.put("price", g.getPrice());
             card.put("game", g.getUri());
         }
 
