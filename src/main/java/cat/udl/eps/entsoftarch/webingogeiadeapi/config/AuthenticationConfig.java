@@ -49,6 +49,7 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
       player.setUsername("player1");
       player.setPassword(defaultPassword);
       player.encodePassword();
+      player.setWallet(100);
       playerRepository.save(player);
     }
     if (!playerRepository.existsById("player2")) {

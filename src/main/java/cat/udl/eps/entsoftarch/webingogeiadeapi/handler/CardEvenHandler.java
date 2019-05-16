@@ -31,7 +31,7 @@ public class CardEvenHandler {
         Player p = (Player)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Player p2 = (Player) playerRepository.findByEmail(p.getEmail());
         double moneyP= p2.getWallet();
-        if (moneyP>card.getPrice() && !p2.isPlaying()){
+        if (moneyP>=card.getPrice() && !p2.isPlaying()){
             p2.setWallet(moneyP-card.getPrice());
             p2.setPlaying(true);
             card.setPlayer(p2);
