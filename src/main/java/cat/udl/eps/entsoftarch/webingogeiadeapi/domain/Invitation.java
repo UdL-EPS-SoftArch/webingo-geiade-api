@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Invitation {
+public class Invitation extends UriEntity<Integer>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -26,4 +26,7 @@ public class Invitation {
     @ManyToOne
     @JsonIdentityReference(alwaysAsId = true)
     private Player playerWhoInvited;
+
+    @Override
+    public Integer getId() {return id;}
 }

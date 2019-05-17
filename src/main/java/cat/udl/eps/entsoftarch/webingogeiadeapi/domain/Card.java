@@ -15,7 +15,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Card {
+public class Card extends UriEntity<Integer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -29,6 +29,9 @@ public class Card {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true)
     private Player player;
+
+    @Override
+    public Integer getId() {return id;}
 
     public int[][] randomcard(){
         Random rand = new Random();
