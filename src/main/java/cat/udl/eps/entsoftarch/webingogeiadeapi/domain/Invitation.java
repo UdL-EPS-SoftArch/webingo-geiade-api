@@ -13,7 +13,7 @@ public class Invitation extends UriEntity<Integer>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int id_game;
+    private int idGame;
     private boolean isUnderway;
     private boolean isAccepted;
     private boolean timeout;
