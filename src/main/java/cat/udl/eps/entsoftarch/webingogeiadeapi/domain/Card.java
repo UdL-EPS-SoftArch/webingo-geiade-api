@@ -22,11 +22,11 @@ public class Card extends UriEntity<Integer> {
     private int [][] nums = new int [3][5];
     private int price;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(unique = true)
     private Game game;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(unique = true)
     private Player player;
 
