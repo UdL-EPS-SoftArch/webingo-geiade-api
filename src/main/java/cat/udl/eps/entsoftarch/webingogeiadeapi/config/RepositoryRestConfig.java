@@ -2,6 +2,7 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.config;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Admin;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Card;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Invitation;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -18,5 +19,6 @@ public class RepositoryRestConfig extends RepositoryRestConfigurerAdapter {
         config.exposeIdsFor(Admin.class);
         config.exposeIdsFor(Player.class);
         config.exposeIdsFor(Card.class);
+        config.exposeIdsFor(Invitation.class);
     }
 }
