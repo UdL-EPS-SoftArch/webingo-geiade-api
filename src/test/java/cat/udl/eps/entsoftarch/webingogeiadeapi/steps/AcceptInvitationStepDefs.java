@@ -43,7 +43,7 @@ public class AcceptInvitationStepDefs {
         Player player2 = (Player) userRepository.findByEmail(email2);
 
         this.invitation = new Invitation();
-        this.invitation.setId_game(1);
+        this.invitation.setIdGame(1);
         this.invitation.setPlayerWhoInvited(player1);
         this.invitation.setPlayerInvited(player2);
         this.invitation.setAccepted(false);

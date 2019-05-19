@@ -46,6 +46,7 @@ public class LeaveGameStepDefs {
         gameRepository.save(this.game1);
 
         this.card1 = new Card();
+        cardRepository.save(this.card1);
         this.card1.setId(id_card);
         this.card1.setPlayer(this.player1);
         this.card1.setGame(this.game1);

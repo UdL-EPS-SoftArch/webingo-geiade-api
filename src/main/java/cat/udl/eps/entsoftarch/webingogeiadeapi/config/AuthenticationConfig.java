@@ -1,9 +1,11 @@
 package cat.udl.eps.entsoftarch.webingogeiadeapi.config;
 
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Admin;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.User;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.AdminRepository;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.GameRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +22,7 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
   @Autowired BasicUserDetailsService basicUserDetailsService;
   @Autowired AdminRepository adminRepository;
   @Autowired PlayerRepository playerRepository;
+  @Autowired GameRepository gameRepository;
 
   @Override
   public void init(AuthenticationManagerBuilder auth) throws Exception {
@@ -58,6 +61,23 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
       player2.setPassword(defaultPassword);
       player2.encodePassword();
       playerRepository.save(player2);
+    }
+
+    if (!playerRepository.existsById("player3")) {
+      Player player = new Player();
+      player.setEmail("player3@webingo.org");
+      player.setUsername("player3");
+      player.setPassword(defaultPassword);
+      player.encodePassword();
+      player.setWallet(100);
+      playerRepository.save(player);
+    }
+
+    if (!gameRepository.existsById(1)) {
+      Game game = new Game();
+      game.setName("game1");
+//      game.setId(3);
+      gameRepository.save(game);
     }
   }
 }

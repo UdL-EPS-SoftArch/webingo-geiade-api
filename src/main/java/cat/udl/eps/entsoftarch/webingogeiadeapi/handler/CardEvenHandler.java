@@ -2,14 +2,13 @@ package cat.udl.eps.entsoftarch.webingogeiadeapi.handler;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Game;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Player;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.handler.exceptions.JoinGameException;
-import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.CardRepository;
-import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
+import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.core.annotation.HandleAfterCreate;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Card;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.domain.Card;
 
-import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.AdminRepository;
+import org.springframework.data.rest.core.annotation.HandleBeforeCreate;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.UserRepository;
 import cat.udl.eps.entsoftarch.webingogeiadeapi.repository.CardRepository;
@@ -26,12 +25,13 @@ public class CardEvenHandler {
     @Autowired
     CardRepository cardRepository;
 
-    @HandleAfterCreate
+    @HandleBeforeCreate
     public void handleCardPreCreate(Card card) throws JoinGameException{
+        card.setPrice(3);
         Player p = (Player)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Player p2 = (Player) playerRepository.findByEmail(p.getEmail());
         double moneyP= p2.getWallet();
-        if (moneyP>card.getPrice() && !p2.isPlaying()){
+        if (moneyP>=card.getPrice() && !p2.isPlaying()){
             p2.setWallet(moneyP-card.getPrice());
             p2.setPlaying(true);
             card.setPlayer(p2);

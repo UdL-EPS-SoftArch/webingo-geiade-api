@@ -7,7 +7,7 @@ Feature: Create Game
     Given I login as "admin" with password "password"
     When I register a new game with name "something"
     Then The response code is 201
-    And It has been created a game with id 1 and name "something"
+    And It has been created a game with id 2 and name "something"
 
   Scenario: Create new game with existing name
     Given I login as "admin" with password "password"

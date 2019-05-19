@@ -96,7 +96,7 @@ public class InvitePlayertepdefs {
         playerRepository.save(player1);
 
         this.game_invitation.setPlayerInvited(player1);
-        this.game_invitation.setId_game(6); //for example
+        this.game_invitation.setIdGame(6); //for example
         invitationRepository.save(this.game_invitation);
 
     }

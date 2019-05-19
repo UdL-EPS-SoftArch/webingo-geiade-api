@@ -48,9 +48,10 @@ public class JoinGameStepdefs {
     public void existingGameWithname(String name){
         Game joc = new Game();
         joc.setName(name);
-        Game g = gameRepository.save(joc);
-        this.game_id= g.getId();
-        this.pricebefore = g.getBingoPrize();
+        //joc.setId(1);
+        gameRepository.save(joc);
+        this.game_id= joc.getId();
+        this.pricebefore = joc.getBingoPrize();
     }
 
 
@@ -97,7 +98,7 @@ public class JoinGameStepdefs {
 
     @And("^the jackpot has increased by (\\d+)$")
     public void theJackpotHasIncreasedBy(int price) throws Throwable{
-        Game g = gameRepository.findById(game_id);
+        Game g = gameRepository.findById(this.game_id);
         assertThat(g.getBingoPrize(), is (this.pricebefore+price));
     }
 
@@ -120,8 +121,8 @@ public class JoinGameStepdefs {
     public void userJoinToAGame(String email) throws Throwable {
         Game g = gameRepository.findById(game_id);
         JSONObject card = new JSONObject();
-        card.put("price", 3);
         if (game_id != 0) {
+            card.put("price", g.getPrice());
             card.put("game", g.getUri());
         }
 
